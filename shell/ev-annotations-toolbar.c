@@ -116,7 +116,7 @@ ev_annotations_toolbar_init (EvAnnotationsToolbar *toolbar)
                                      GTK_STYLE_CLASS_INLINE_TOOLBAR);
 
         toolbar->text_button = ev_annotations_toolbar_create_toggle_button (toolbar,
-                                                                            "document-new-symbolic",
+                                                                            "user-available-symbolic",
                                                                             _("Add text annotation"));
         gtk_container_add (GTK_CONTAINER(toolbar), toolbar->text_button);
         gtk_widget_show (toolbar->text_button);
