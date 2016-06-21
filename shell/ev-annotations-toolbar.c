@@ -95,7 +95,9 @@ ev_annotations_toolbar_create_toggle_button (EvAnnotationsToolbar *toolbar,
 {
         GtkWidget *button = GTK_WIDGET (gtk_toggle_tool_button_new ());
 
-        gtk_widget_set_tooltip_text (button, tooltip);
+	//GtkWidget *button = gtk_image_new_from_file(path);       
+
+	gtk_widget_set_tooltip_text (button, tooltip);
         gtk_tool_button_set_icon_name (GTK_TOOL_BUTTON (button), icon_name);
         /* For some reason adding text-button class to the GtkToogleButton makes the button smaller */
         gtk_style_context_add_class (gtk_widget_get_style_context (gtk_bin_get_child (GTK_BIN (button))), "text-button");
@@ -107,6 +109,19 @@ ev_annotations_toolbar_create_toggle_button (EvAnnotationsToolbar *toolbar,
 }
 
 static void
+ev_custom_icon_to_builtin_theme (const gchar *icon_file_path, 
+				 const gchar *custom_icon_name)
+{
+	GdkPixbuf *pixbuf = gdk_pixbuf_new_from_file(icon_file_path, NULL);
+	int width, height;
+	gdk_pixbuf_get_file_info (icon_file_path, &width, &height);
+	gtk_icon_theme_add_builtin_icon (custom_icon_name, width, pixbuf);
+	g_object_unref (G_OBJECT(pixbuf));
+
+
+}
+
+static void
 ev_annotations_toolbar_init (EvAnnotationsToolbar *toolbar)
 {
         gtk_orientable_set_orientation (GTK_ORIENTABLE (toolbar), GTK_ORIENTATION_HORIZONTAL);
@@ -115,15 +130,20 @@ ev_annotations_toolbar_init (EvAnnotationsToolbar *toolbar)
         gtk_style_context_add_class (gtk_widget_get_style_context (GTK_WIDGET (toolbar)),
                                      GTK_STYLE_CLASS_INLINE_TOOLBAR);
 
-        toolbar->text_button = ev_annotations_toolbar_create_toggle_button (toolbar,
-                                                                            "user-available-symbolic",
+	//Add call to new function for both new icons  
+	ev_custom_icon_to_builtin_theme("../data/icons/24x24/actions/evince-comment-annotation.png", "evince-comment-annotation");      
+
+	toolbar->text_button = ev_annotations_toolbar_create_toggle_button (toolbar,
+                                                                            "evince-comment-annotation",
                                                                             _("Add text annotation"));
         gtk_container_add (GTK_CONTAINER(toolbar), toolbar->text_button);
         gtk_widget_show (toolbar->text_button);
 
-        /* FIXME: use a better icon than select-all */
+ 	ev_custom_icon_to_builtin_theme("../data/icons/24x24/actions/evince-highlight-annotation.png", "evince-highlight-annotation");       
+
+	/* FIXME: use a better icon than select-all */
         toolbar->highlight_button = ev_annotations_toolbar_create_toggle_button (toolbar,
-                                                                                 "edit-select-all-symbolic",
+                                                                                 "evince-highlight-annotation",
                                                                                  _("Add highlight annotation"));
         gtk_container_add (GTK_CONTAINER (toolbar), toolbar->highlight_button);
         gtk_widget_show (toolbar->highlight_button);

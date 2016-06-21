@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   id="svg7384"
+   height="16"
+   width="16"
+   version="1.1"
+   inkscape:version="0.91 r13725"
+   sodipodi:docname="text-editor-symbolic.svg"
+   inkscape:export-filename="/home/arshad/evince/data/icons/scalable/actions/evince-highlight-annotation.png"
+   inkscape:export-xdpi="151.41978"
+   inkscape:export-ydpi="151.41978">
+  <defs
+     id="defs4210" />
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1680"
+     inkscape:window-height="986"
+     id="namedview4208"
+     showgrid="false"
+     inkscape:zoom="43.9375"
+     inkscape:cx="5.490663"
+     inkscape:cy="8.2200482"
+     inkscape:window-x="0"
+     inkscape:window-y="27"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer11" />
+  <metadata
+     id="metadata90">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title>Gnome Symbolic Icon Theme</dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <title
+     id="title9167">Gnome Symbolic Icon Theme</title>
+  <g
+     id="layer11"
+     transform="translate(-283.03 -629.03)">
+    <path
+       id="path2273-6-2"
+       style="fill:#bebebe;fill-rule:evenodd"
+       d="m 287.14259,638.58722 7.82341,-8.07177 c 1.11791,0 2.23583,1.15311 2.23583,2.30622 l -7.82542,8.07177 -2.23583,0 z"
+       inkscape:connector-curvature="0" />
+    <path
+       style="fill:#000000;fill-opacity:1"
+       d="m 287.14265,639.74414 0,-1.14588 3.90187,-4.02623 3.90186,-4.02624 0.1283,-0.007 c 0.26635,-0.0143 0.70147,0.14527 1.04632,0.38367 0.19493,0.13475 0.53096,0.47389 0.66401,0.67015 0.13077,0.19289 0.24293,0.42424 0.31227,0.6441 0.0617,0.19562 0.11267,0.54286 0.0861,0.58668 -0.008,0.0138 -1.76987,1.83436 -3.91452,4.04577 l -3.89937,4.02074 -1.11343,0 -1.11344,0 0,-1.14588 z"
+       id="path4248"
+       inkscape:connector-curvature="0"
+       inkscape:export-xdpi="4451.313"
+       inkscape:export-ydpi="4451.313" />
+    <path
+       style="fill:#ffffff;fill-opacity:1"
+       id="path4288"
+       d="m 287.40812,641.82597 c -0.0425,0.0354 -0.0883,0.0669 -0.12875,0.10476 -0.0338,0.0291 -0.0652,0.0606 -0.0989,0.0898 -0.0263,0.0245 -0.0535,0.0491 -0.0763,0.0769 -0.0219,0.0334 -0.0474,0.0643 -0.0724,0.0959 -0.0228,0.0315 -0.0623,0.0525 -0.0797,0.0879 -0.0417,0.0496 -0.0906,0.0922 -0.13951,0.13439 -0.0492,0.0388 -0.0921,0.0835 -0.1331,0.13057 -0.0146,0.0217 -0.0303,0.0426 -0.0461,0.0635 0,0 -1.63201,-1.58636 -1.63201,-1.58636 l 0,0 c 0.019,-0.0256 0.0376,-0.0515 0.0582,-0.0758 0.0483,-0.0549 0.0989,-0.10724 0.15588,-0.15333 0.0358,-0.0307 0.0733,-0.0603 0.10266,-0.0972 0.0267,-0.0329 0.056,-0.0631 0.0854,-0.0937 0.0275,-0.0352 0.0531,-0.0718 0.0821,-0.10574 0.0315,-0.0342 0.0637,-0.0679 0.0983,-0.0989 0.0312,-0.0261 0.0593,-0.0554 0.0905,-0.0815 0.0448,-0.0427 0.0936,-0.0801 0.14232,-0.11815 0,0 1.59144,1.62706 1.59144,1.62706 z"
+       inkscape:connector-curvature="0" />
+    <rect
+       style="fill:#000000;fill-opacity:1"
+       id="rect4300"
+       width="4.4608817"
+       height="1.7980086"
+       x="-251.99095"
+       y="655.3916"
+       transform="matrix(0.70710678,-0.70710678,0.70710678,0.70710678,0,0)" />
+    <path
+       style="fill:#999999;fill-opacity:1;stroke:#000000;stroke-width:0.03255889;stroke-opacity:1"
+       d="m 284.29055,642.32353 0,-0.59526 6.50672,0 6.50672,0 0,0.59526 0,0.59527 -6.50672,0 -6.50672,0 0,-0.59527 z"
+       id="path4395"
+       inkscape:connector-curvature="0" />
+  </g>
+</svg>
