@@ -131,7 +131,7 @@ ev_annotations_toolbar_init (EvAnnotationsToolbar *toolbar)
                                      GTK_STYLE_CLASS_INLINE_TOOLBAR);
 
 	//Add call to new function for both new icons  
-	ev_custom_icon_to_builtin_theme("../data/icons/24x24/actions/evince-comment-annotation.png", "evince-comment-annotation");      
+	ev_custom_icon_to_builtin_theme("../data/icons/22x22/actions/evince-comment-annotation.png", "evince-comment-annotation");      
 
 	toolbar->text_button = ev_annotations_toolbar_create_toggle_button (toolbar,
                                                                             "evince-comment-annotation",
@@ -139,7 +139,7 @@ ev_annotations_toolbar_init (EvAnnotationsToolbar *toolbar)
         gtk_container_add (GTK_CONTAINER(toolbar), toolbar->text_button);
         gtk_widget_show (toolbar->text_button);
 
- 	ev_custom_icon_to_builtin_theme("../data/icons/24x24/actions/evince-highlight-annotation.png", "evince-highlight-annotation");       
+ 	ev_custom_icon_to_builtin_theme("../data/icons/22x22/actions/evince-highlight-annotation.png", "evince-highlight-annotation");       
 
 	/* FIXME: use a better icon than select-all */
         toolbar->highlight_button = ev_annotations_toolbar_create_toggle_button (toolbar,
