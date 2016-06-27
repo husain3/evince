@@ -9,8 +9,6 @@ endif
 evince_SOURCES=				\
 	ev-annotation-properties-dialog.h \
 	ev-annotation-properties-dialog.c \
-	ev-annotations-marshaller.h 	\
-	ev-annotations-marshaller.c 	\
 	ev-annotations-toolbar.h	\
 	ev-annotations-toolbar.c	\
 	ev-bookmarks.h			\
@@ -77,6 +75,8 @@ evince_SOURCES=				\
 
 nodist_evince_SOURCES = \
 	ev-resources.c \
+	ev-annotations-marshaller.h 	\
+	ev-annotations-marshaller.c 	\
 	$(NULL)
 
 if ENABLE_DBUS
@@ -132,8 +132,10 @@ evince-icon.o: $(srcdir)/evince-icon.rc $(top_srcdir)/data/evince.ico
 	$(AM_V_GEN)$(WINDRES) $(srcdir)/evince-icon.rc -I $(top_srcdir)/data evince-icon.o
 endif
 
-BUILT_SOURCES = \
-	ev-resources.c
+BUILT_SOURCES =				\
+	ev-resources.c			\
+	ev-annotations-marshaller.c 	\
+	ev-annotations-marshaller.h 
 
 if ENABLE_DBUS
 BUILT_SOURCES += \
@@ -142,6 +144,10 @@ BUILT_SOURCES += \
 	ev-daemon-gdbus-generated.c \
 	ev-daemon-gdbus-generated.h
 endif
+
+CLEANFILES =				\
+	ev-annotations-marshaller.c 	\
+	ev-annotations-marshaller.h 	
 
 if ENABLE_DBUS
 evinced_SOURCES = \
@@ -193,6 +199,14 @@ $(GRESOURCE_XML_FILE): $(GRESOURCE_XML_IN_FILES) Makefile
 ev-resources.c: $(GRESOURCE_XML_FILE) Makefile $(shell $(GLIB_COMPILE_RESOURCES) --generate-dependencies --sourcedir=$(srcdir) --sourcedir=$(top_srcdir)/data $(srcdir)/evince.gresource.xml)
 	$(AM_V_GEN) XMLLINT=$(XMLLINT) $(GLIB_COMPILE_RESOURCES) --target $@ --sourcedir=$(srcdir) --sourcedir=$(top_srcdir)/data --generate-source --c-name ev $<
 
+
+ev-annotations-marshaller.h: $(srcdir)/ev-annotations-toolbar-marshal.list
+	$(AM_V_GEN)$(GLIB_GENMARSHAL) $(srcdir)/ev-annotations-toolbar-marshal.list --header --internal > $@
+
+ev-annotations-marshaller.c: $(srcdir)/ev-annotations-toolbar-marshal.list
+	$(AM_V_at)echo '#include <config.h>' > ev-annotations-marshaller.c
+	$(AM_V_GEN)$(GLIB_GENMARSHAL) $(srcdir)/ev-annotations-toolbar-marshal.list --header --internal --body >> $@
+
 ev-gdbus-generated.c ev-gdbus-generated.h: ev-gdbus.xml Makefile
 	$(AM_V_GEN) $(GDBUS_CODEGEN) \
 			--interface-prefix=org.gnome.evince \
@@ -208,6 +222,7 @@ ev-daemon-gdbus-generated.c ev-daemon-gdbus-generated.h: ev-daemon-gdbus.xml Mak
 			--c-generate-object-manager \
 			--generate-c-code ev-daemon-gdbus-generated \
 			$<
+
 
 DISTCLEANFILES = $(BUILT_SOURCES) $(GRESOURCE_XML_FILE)
 
