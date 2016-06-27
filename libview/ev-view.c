@@ -3414,7 +3414,7 @@ ev_view_annotation_color(EvView  *view)
 	{	
 		if(view->adding_annot_info.color == EV_ANNOTATION_COLOR_YELLOW)
 		{
-			printf("Inside Highlight. Setting yellow color\n");
+
 			color.pixel = 0;
 			color.red = 65535;
 			color.green = 65535;
@@ -3423,7 +3423,7 @@ ev_view_annotation_color(EvView  *view)
 
 		} else if (view->adding_annot_info.color == EV_ANNOTATION_COLOR_CYAN) 
 		{
-			printf("Inside Highlight. Setting cyan color\n");
+
 			color.pixel = 0;
 			color.red = 0;
 			color.green = 65535;
@@ -3432,7 +3432,7 @@ ev_view_annotation_color(EvView  *view)
 
 		} else if (view->adding_annot_info.color == EV_ANNOTATION_COLOR_GREEN) 
 		{
-			printf("Inside Highlight. Setting green color\n");
+
 			color.pixel = 0;
 			color.red = 0;
 			color.green = 65535;
@@ -3441,7 +3441,7 @@ ev_view_annotation_color(EvView  *view)
 
 		} else if (view->adding_annot_info.color == EV_ANNOTATION_COLOR_MAGENTA) 
 		{
-			printf("Inside Highlight. Setting magenta color\n");
+
 			color.pixel = 0;
 			color.red = 65535;
 			color.green = 0;
@@ -3451,7 +3451,7 @@ ev_view_annotation_color(EvView  *view)
 		}
 
 	}
-	printf("Outside If statements. Setting yellow color\n");
+
 	color.pixel = 0;
 	color.red = 65535;
 	color.green = 65535;
@@ -3489,7 +3489,7 @@ ev_view_begin_add_annotation (EvView          *view,
 
 	/*add color to struct here*/
 	view->adding_annot_info.color = annot_color;
-	printf("EV_ANNOTATION_COLOR: %d\n", view->adding_annot_info.color);
+
 	ev_view_set_cursor (view, EV_VIEW_CURSOR_ADD);
 }
 

@@ -57,7 +57,6 @@ ev_annotations_toolbar_annot_button_toggled (GtkWidget            *button,
         EvAnnotationType annot_type;
 	EvAnnotationColor annot_color;
 
-	printf("Yellow %d\n Cyan %d\n, Green %d\n, Magenta %d\n", EV_ANNOTATION_COLOR_YELLOW, EV_ANNOTATION_COLOR_CYAN, EV_ANNOTATION_COLOR_GREEN, EV_ANNOTATION_COLOR_MAGENTA);
 
         if (!gtk_toggle_tool_button_get_active (GTK_TOGGLE_TOOL_BUTTON (button))) {
                 g_signal_emit (toolbar, signals[CANCEL_ADD_ANNOT], 0, NULL);
@@ -103,7 +102,7 @@ ev_annotations_toolbar_annot_button_toggled (GtkWidget            *button,
                 g_assert_not_reached ();
         }
 
-	printf("annot_color %d\n", annot_color);
+
 
         g_signal_emit (toolbar, signals[BEGIN_ADD_ANNOT], 0, annot_type, annot_color);
 }
