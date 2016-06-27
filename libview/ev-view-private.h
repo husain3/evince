@@ -78,6 +78,23 @@ typedef enum {
 	EV_PAN_ACTION_PREV
 } EvPanAction;
 
+typedef enum { //might have to put this into another header file instead
+	EV_HIGHLIGHT_YELLOW,
+	EV_HIGHLIGHT_BLUE,
+	EV_HIGHLIGHT_GREEN,
+	EV_HIGHLIGHT_MAGENTA
+} EvHighlightColors;
+
+
+/*Might not be needed*/
+typedef struct highlight_color {
+	guint32 pixel;
+	guint16 red;
+	guint16 green;
+	guint16 blue;
+} highlight_color;
+
+
 /* Annotation popup windows */
 typedef struct {
 	GtkWidget *window;
@@ -119,6 +136,7 @@ typedef struct {
 	GdkPoint         stop;
 	gboolean         adding_annot;
 	EvAnnotationType type;
+	EvAnnotationColor       color;       
 	EvAnnotation    *annot;
 } AddingAnnotInfo;
 

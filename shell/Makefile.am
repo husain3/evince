@@ -9,6 +9,8 @@ endif
 evince_SOURCES=				\
 	ev-annotation-properties-dialog.h \
 	ev-annotation-properties-dialog.c \
+	ev-annotations-marshaller.h 	\
+	ev-annotations-marshaller.c 	\
 	ev-annotations-toolbar.h	\
 	ev-annotations-toolbar.c	\
 	ev-bookmarks.h			\

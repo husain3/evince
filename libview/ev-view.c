@@ -3315,9 +3315,13 @@ ev_view_create_annotation (EvView *view)
 	GtkBorder       border;
 	EvRectangle     doc_rect, popup_rect;
 	EvPage         *page;
-	GdkColor        color = { 0, 65535, 65535, 0 };
+	/*Add function call (with EvView annotation color argument) here that returns GdkColor to set highlight color here*/
+	GdkColor        color;
 	GdkRectangle    view_rect;
 	cairo_region_t *region;
+
+	
+	color = ev_view_annotation_color(view);
 
 	find_page_at_location (view, view->adding_annot_info.start.x, view->adding_annot_info.start.y, &annot_page, &offset, &offset);
 	if (annot_page == -1) {
@@ -3393,6 +3397,69 @@ ev_view_create_annotation (EvView *view)
 	ev_view_set_cursor (view, EV_VIEW_CURSOR_NORMAL);
 }
 
+GdkColor 
+ev_view_annotation_color(EvView  *view)
+{
+	GdkColor        color;
+
+	if(view->adding_annot_info.type == EV_ANNOTATION_TYPE_TEXT)
+	{
+		color.pixel = 0;
+		color.red = 65535;
+		color.green = 65535;
+		color.blue = 0;
+		return color;
+	
+	} else if (view->adding_annot_info.type == EV_ANNOTATION_TYPE_TEXT_MARKUP)
+	{	
+		if(view->adding_annot_info.color == EV_ANNOTATION_COLOR_YELLOW)
+		{
+			printf("Inside Highlight. Setting yellow color\n");
+			color.pixel = 0;
+			color.red = 65535;
+			color.green = 65535;
+			color.blue = 0;
+			return color;
+
+		} else if (view->adding_annot_info.color == EV_ANNOTATION_COLOR_CYAN) 
+		{
+			printf("Inside Highlight. Setting cyan color\n");
+			color.pixel = 0;
+			color.red = 0;
+			color.green = 65535;
+			color.blue = 65535;
+			return color;
+
+		} else if (view->adding_annot_info.color == EV_ANNOTATION_COLOR_GREEN) 
+		{
+			printf("Inside Highlight. Setting green color\n");
+			color.pixel = 0;
+			color.red = 0;
+			color.green = 65535;
+			color.blue = 0;
+			return color;
+
+		} else if (view->adding_annot_info.color == EV_ANNOTATION_COLOR_MAGENTA) 
+		{
+			printf("Inside Highlight. Setting magenta color\n");
+			color.pixel = 0;
+			color.red = 65535;
+			color.green = 0;
+			color.blue = 65535;
+			return color;
+
+		}
+
+	}
+	printf("Outside If statements. Setting yellow color\n");
+	color.pixel = 0;
+	color.red = 65535;
+	color.green = 65535;
+	color.blue = 0;
+	return color;
+
+}
+
 void
 ev_view_focus_annotation (EvView    *view,
 			  EvMapping *annot_mapping)
@@ -3407,7 +3474,8 @@ ev_view_focus_annotation (EvView    *view,
 
 void
 ev_view_begin_add_annotation (EvView          *view,
-			      EvAnnotationType annot_type)
+			      EvAnnotationType annot_type,
+			      EvAnnotationColor annot_color)
 {
 	if (annot_type == EV_ANNOTATION_TYPE_UNKNOWN)
 		return;
@@ -3417,6 +3485,11 @@ ev_view_begin_add_annotation (EvView          *view,
 
 	view->adding_annot_info.adding_annot = TRUE;
 	view->adding_annot_info.type = annot_type;
+
+
+	/*add color to struct here*/
+	view->adding_annot_info.color = annot_color;
+	printf("EV_ANNOTATION_COLOR: %d\n", view->adding_annot_info.color);
 	ev_view_set_cursor (view, EV_VIEW_CURSOR_ADD);
 }
 

@@ -21,6 +21,7 @@
 #include "config.h"
 
 #include "ev-annotations-toolbar.h"
+#include "ev-annotations-marshaller.h"
 #include <evince-document.h>
 #include <glib/gi18n.h>
 
@@ -34,7 +35,10 @@ struct _EvAnnotationsToolbar {
 	GtkToolbar base_instance;
 
         GtkWidget *text_button;
-        GtkWidget *highlight_button;
+        GtkWidget *highlight_button_yellow;
+        GtkWidget *highlight_button_cyan;
+	GtkWidget *highlight_button_green;
+	GtkWidget *highlight_button_magenta;
 };
 
 struct _EvAnnotationsToolbarClass {
@@ -51,6 +55,9 @@ ev_annotations_toolbar_annot_button_toggled (GtkWidget            *button,
                                              EvAnnotationsToolbar *toolbar)
 {
         EvAnnotationType annot_type;
+	EvAnnotationColor annot_color;
+
+	printf("Yellow %d\n Cyan %d\n, Green %d\n, Magenta %d\n", EV_ANNOTATION_COLOR_YELLOW, EV_ANNOTATION_COLOR_CYAN, EV_ANNOTATION_COLOR_GREEN, EV_ANNOTATION_COLOR_MAGENTA);
 
         if (!gtk_toggle_tool_button_get_active (GTK_TOGGLE_TOOL_BUTTON (button))) {
                 g_signal_emit (toolbar, signals[CANCEL_ADD_ANNOT], 0, NULL);
@@ -59,15 +66,46 @@ ev_annotations_toolbar_annot_button_toggled (GtkWidget            *button,
 
         if (button == toolbar->text_button) {
                 annot_type = EV_ANNOTATION_TYPE_TEXT;
-                gtk_toggle_tool_button_set_active (GTK_TOGGLE_TOOL_BUTTON (toolbar->highlight_button), FALSE);
-        } else if (button == toolbar->highlight_button) {
+		annot_color = EV_ANNOTATION_COLOR_YELLOW;
+                gtk_toggle_tool_button_set_active (GTK_TOGGLE_TOOL_BUTTON (toolbar->highlight_button_yellow), FALSE);
+                gtk_toggle_tool_button_set_active (GTK_TOGGLE_TOOL_BUTTON (toolbar->highlight_button_cyan), FALSE);
+                gtk_toggle_tool_button_set_active (GTK_TOGGLE_TOOL_BUTTON (toolbar->highlight_button_green), FALSE);
+                gtk_toggle_tool_button_set_active (GTK_TOGGLE_TOOL_BUTTON (toolbar->highlight_button_magenta), FALSE);
+        } else if (button == toolbar->highlight_button_yellow) {
                 annot_type = EV_ANNOTATION_TYPE_TEXT_MARKUP;
+		annot_color = EV_ANNOTATION_COLOR_YELLOW;
                 gtk_toggle_tool_button_set_active (GTK_TOGGLE_TOOL_BUTTON (toolbar->text_button), FALSE);
+               	gtk_toggle_tool_button_set_active (GTK_TOGGLE_TOOL_BUTTON (toolbar->highlight_button_cyan), FALSE);
+                gtk_toggle_tool_button_set_active (GTK_TOGGLE_TOOL_BUTTON (toolbar->highlight_button_green), FALSE);
+                gtk_toggle_tool_button_set_active (GTK_TOGGLE_TOOL_BUTTON (toolbar->highlight_button_magenta), FALSE);
+	} else if (button == toolbar->highlight_button_cyan) {
+                annot_type = EV_ANNOTATION_TYPE_TEXT_MARKUP;
+		annot_color = EV_ANNOTATION_COLOR_CYAN;
+                gtk_toggle_tool_button_set_active (GTK_TOGGLE_TOOL_BUTTON (toolbar->text_button), FALSE);
+               	gtk_toggle_tool_button_set_active (GTK_TOGGLE_TOOL_BUTTON (toolbar->highlight_button_yellow), FALSE);
+                gtk_toggle_tool_button_set_active (GTK_TOGGLE_TOOL_BUTTON (toolbar->highlight_button_green), FALSE);
+                gtk_toggle_tool_button_set_active (GTK_TOGGLE_TOOL_BUTTON (toolbar->highlight_button_magenta), FALSE);
+	} else if (button == toolbar->highlight_button_green) {
+                annot_type = EV_ANNOTATION_TYPE_TEXT_MARKUP;
+		annot_color = EV_ANNOTATION_COLOR_GREEN;
+                gtk_toggle_tool_button_set_active (GTK_TOGGLE_TOOL_BUTTON (toolbar->text_button), FALSE);
+               	gtk_toggle_tool_button_set_active (GTK_TOGGLE_TOOL_BUTTON (toolbar->highlight_button_cyan), FALSE);
+                gtk_toggle_tool_button_set_active (GTK_TOGGLE_TOOL_BUTTON (toolbar->highlight_button_yellow), FALSE);
+                gtk_toggle_tool_button_set_active (GTK_TOGGLE_TOOL_BUTTON (toolbar->highlight_button_magenta), FALSE);
+	} else if (button == toolbar->highlight_button_magenta) {
+                annot_type = EV_ANNOTATION_TYPE_TEXT_MARKUP;
+		annot_color = EV_ANNOTATION_COLOR_MAGENTA;
+                gtk_toggle_tool_button_set_active (GTK_TOGGLE_TOOL_BUTTON (toolbar->text_button), FALSE);
+               	gtk_toggle_tool_button_set_active (GTK_TOGGLE_TOOL_BUTTON (toolbar->highlight_button_cyan), FALSE);
+                gtk_toggle_tool_button_set_active (GTK_TOGGLE_TOOL_BUTTON (toolbar->highlight_button_green), FALSE);
+                gtk_toggle_tool_button_set_active (GTK_TOGGLE_TOOL_BUTTON (toolbar->highlight_button_yellow), FALSE);
         } else {
                 g_assert_not_reached ();
         }
 
-        g_signal_emit (toolbar, signals[BEGIN_ADD_ANNOT], 0, annot_type);
+	printf("annot_color %d\n", annot_color);
+
+        g_signal_emit (toolbar, signals[BEGIN_ADD_ANNOT], 0, annot_type, annot_color);
 }
 
 static gboolean
@@ -139,14 +177,43 @@ ev_annotations_toolbar_init (EvAnnotationsToolbar *toolbar)
         gtk_container_add (GTK_CONTAINER(toolbar), toolbar->text_button);
         gtk_widget_show (toolbar->text_button);
 
- 	ev_custom_icon_to_builtin_theme("../data/icons/22x22/actions/evince-highlight-annotation.png", "evince-highlight-annotation");       
+ 	ev_custom_icon_to_builtin_theme("../data/icons/22x22/actions/evince-yellow-highlight-annotation.png", "evince-yellow-highlight-annotation");       
 
 	/* FIXME: use a better icon than select-all */
-        toolbar->highlight_button = ev_annotations_toolbar_create_toggle_button (toolbar,
-                                                                                 "evince-highlight-annotation",
-                                                                                 _("Add highlight annotation"));
-        gtk_container_add (GTK_CONTAINER (toolbar), toolbar->highlight_button);
-        gtk_widget_show (toolbar->highlight_button);
+        toolbar->highlight_button_yellow = ev_annotations_toolbar_create_toggle_button (toolbar,
+                                                                                 "evince-yellow-highlight-annotation",
+                                                                                 _("Yellow highlighter"));
+        gtk_container_add (GTK_CONTAINER (toolbar), toolbar->highlight_button_yellow);
+        gtk_widget_show (toolbar->highlight_button_yellow);
+
+	ev_custom_icon_to_builtin_theme("../data/icons/22x22/actions/evince-cyan-highlight-annotation.png", "evince-cyan-highlight-annotation");       
+
+	/* FIXME: use a better icon than select-all */
+        toolbar->highlight_button_cyan = ev_annotations_toolbar_create_toggle_button (toolbar,
+                                                                                 "evince-cyan-highlight-annotation",
+                                                                                 _("Blue highlighter"));
+        gtk_container_add (GTK_CONTAINER (toolbar), toolbar->highlight_button_cyan);
+        gtk_widget_show (toolbar->highlight_button_cyan);
+
+	ev_custom_icon_to_builtin_theme("../data/icons/22x22/actions/evince-green-highlight-annotation.png", "evince-green-highlight-annotation");       
+
+	/* FIXME: use a better icon than select-all */
+        toolbar->highlight_button_green = ev_annotations_toolbar_create_toggle_button (toolbar,
+                                                                                 "evince-green-highlight-annotation",
+                                                                                 _("Green highlighter"));
+        gtk_container_add (GTK_CONTAINER (toolbar), toolbar->highlight_button_green);
+        gtk_widget_show (toolbar->highlight_button_green);
+
+	ev_custom_icon_to_builtin_theme("../data/icons/22x22/actions/evince-magenta-highlight-annotation.png", "evince-magenta-highlight-annotation");       
+
+	/* FIXME: use a better icon than select-all */
+        toolbar->highlight_button_magenta = ev_annotations_toolbar_create_toggle_button (toolbar,
+                                                                                "evince-magenta-highlight-annotation",
+                                                                                 _("Pink highligher"));
+        gtk_container_add (GTK_CONTAINER (toolbar), toolbar->highlight_button_magenta);
+        gtk_widget_show (toolbar->highlight_button_magenta);
+
+
 }
 
 static void
@@ -160,9 +227,10 @@ ev_annotations_toolbar_class_init (EvAnnotationsToolbarClass *klass)
                               G_SIGNAL_RUN_LAST,
                               0,
                               NULL, NULL,
-                              g_cclosure_marshal_VOID__ENUM,
-                              G_TYPE_NONE, 1,
-                              EV_TYPE_ANNOTATION_TYPE);
+                              g_cclosure_user_marshal_VOID__ENUM_ENUM,
+                              G_TYPE_NONE, 2,
+                              EV_TYPE_ANNOTATION_TYPE, 
+			      EV_TYPE_ANNOTATION_COLOR);
 
         signals[CANCEL_ADD_ANNOT] =
                 g_signal_new ("cancel-add-annot",
@@ -189,5 +257,8 @@ ev_annotations_toolbar_add_annot_finished (EvAnnotationsToolbar *toolbar)
         if (ev_annotations_toolbar_toggle_button_if_active (toolbar, GTK_TOGGLE_TOOL_BUTTON (toolbar->text_button)))
                 return;
 
-        ev_annotations_toolbar_toggle_button_if_active (toolbar, GTK_TOGGLE_TOOL_BUTTON (toolbar->highlight_button));
+        ev_annotations_toolbar_toggle_button_if_active (toolbar, GTK_TOGGLE_TOOL_BUTTON (toolbar->highlight_button_yellow));
+        ev_annotations_toolbar_toggle_button_if_active (toolbar, GTK_TOGGLE_TOOL_BUTTON (toolbar->highlight_button_cyan));
+        ev_annotations_toolbar_toggle_button_if_active (toolbar, GTK_TOGGLE_TOOL_BUTTON (toolbar->highlight_button_green));
+        ev_annotations_toolbar_toggle_button_if_active (toolbar, GTK_TOGGLE_TOOL_BUTTON (toolbar->highlight_button_magenta));
 }
