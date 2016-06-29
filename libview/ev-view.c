@@ -3350,8 +3350,30 @@ ev_view_create_annotation (EvView *view)
 		doc_rect.y1 = start.y;
 		doc_rect.x2 = end.x;
 		doc_rect.y2 = end.y;
+
+
+		printf("view->adding_annot_info.markup_type %d\n", view->adding_annot_info.markup_type);
+		/*switch (view->adding_annot_info.markup_type) {
+		case EV_ANNOTATION_TEXT_MARKUP_HIGHLIGHT:
+			annot = ev_annotation_text_markup_highlight_new (page);
+			break;
+		case EV_ANNOTATION_TEXT_MARKUP_STRIKE_OUT:
+			annot = ev_annotation_text_markup_strike_out_new (page);
+			break;
+		case EV_ANNOTATION_TEXT_MARKUP_UNDERLINE:
+			annot = ev_annotation_text_markup_underline_new (page);
+			break;
+		case EV_ANNOTATION_TEXT_MARKUP_SQUIGGLY:
+			annot = ev_annotation_text_markup_squiggly_new (page);
+			break;
+		case EV_ANNOTATION_TEXT_MARKUP_NONE:
+			printf("Error: Cannot have markup with no markup type.\n");
+			break;
+		}*/
 		annot = ev_annotation_text_markup_highlight_new (page);
 		break;
+		
+	/*insert underline case here*/
 	case EV_ANNOTATION_TYPE_ATTACHMENT:
 		/* TODO */
 		g_object_unref (page);
@@ -3475,6 +3497,7 @@ ev_view_focus_annotation (EvView    *view,
 void
 ev_view_begin_add_annotation (EvView          *view,
 			      EvAnnotationType annot_type,
+			      EvAnnotationTextMarkupType annot_markup_type,
 			      EvAnnotationColor annot_color)
 {
 	if (annot_type == EV_ANNOTATION_TYPE_UNKNOWN)
@@ -3486,6 +3509,8 @@ ev_view_begin_add_annotation (EvView          *view,
 	view->adding_annot_info.adding_annot = TRUE;
 	view->adding_annot_info.type = annot_type;
 
+	printf("ev_view_begin_add_annotation: annot_markup_type %d", annot_markup_type);
+	view->adding_annot_info.markup_type = annot_markup_type;
 
 	/*add color to struct here*/
 	view->adding_annot_info.color = annot_color;

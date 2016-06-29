@@ -1468,7 +1468,8 @@ ev_annotation_text_markup_underline_new (EvPage *page)
                                                            "page", page,
                                                            "type", EV_ANNOTATION_TEXT_MARKUP_UNDERLINE,
                                                            NULL));
-        return annot;
+	printf("Inside 'ev_annotation_text_markup_underline_new'\n");        
+	return annot;
 }
 
 EvAnnotation *

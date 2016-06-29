@@ -5702,10 +5702,12 @@ sidebar_annots_annot_activated_cb (EvSidebarAnnotations *sidebar_annots,
 static void
 ev_window_begin_add_annot (EvWindow        *window,
 			   EvAnnotationType annot_type,
+			   EvAnnotationTextMarkupType annot_markup_type,
 			   EvAnnotationColor	annot_color)
 {
+	printf("annot_type %d\nannot_markup_type%d\nannot_color%d\n", annot_type, annot_markup_type, annot_color);
 	/*add annotation color here*/
-	ev_view_begin_add_annotation (EV_VIEW (window->priv->view), annot_type, annot_color);
+	ev_view_begin_add_annotation (EV_VIEW (window->priv->view), annot_type, annot_markup_type, annot_color);
 }
 
 static void

@@ -136,6 +136,7 @@ typedef struct {
 	GdkPoint         stop;
 	gboolean         adding_annot;
 	EvAnnotationType type;
+	EvAnnotationTextMarkupType markup_type;
 	EvAnnotationColor       color;       
 	EvAnnotation    *annot;
 } AddingAnnotInfo;
