@@ -75,6 +75,7 @@ ev_annotations_toolbar_annot_button_toggled (GtkWidget            *button,
                 gtk_toggle_tool_button_set_active (GTK_TOGGLE_TOOL_BUTTON (toolbar->highlight_button_green), FALSE);
                 gtk_toggle_tool_button_set_active (GTK_TOGGLE_TOOL_BUTTON (toolbar->highlight_button_magenta), FALSE);
                 gtk_toggle_tool_button_set_active (GTK_TOGGLE_TOOL_BUTTON (toolbar->underline_button), FALSE);
+                gtk_toggle_tool_button_set_active (GTK_TOGGLE_TOOL_BUTTON (toolbar->strikethrough_button), FALSE);
         
 	} else if (button == toolbar->highlight_button_yellow) {
                 annot_type = EV_ANNOTATION_TYPE_TEXT_MARKUP;
@@ -85,6 +86,7 @@ ev_annotations_toolbar_annot_button_toggled (GtkWidget            *button,
                 gtk_toggle_tool_button_set_active (GTK_TOGGLE_TOOL_BUTTON (toolbar->highlight_button_green), FALSE);
                 gtk_toggle_tool_button_set_active (GTK_TOGGLE_TOOL_BUTTON (toolbar->highlight_button_magenta), FALSE);
                 gtk_toggle_tool_button_set_active (GTK_TOGGLE_TOOL_BUTTON (toolbar->underline_button), FALSE);
+                gtk_toggle_tool_button_set_active (GTK_TOGGLE_TOOL_BUTTON (toolbar->strikethrough_button), FALSE);
 	
 	} else if (button == toolbar->highlight_button_cyan) {
                 annot_type = EV_ANNOTATION_TYPE_TEXT_MARKUP;
@@ -95,6 +97,7 @@ ev_annotations_toolbar_annot_button_toggled (GtkWidget            *button,
                 gtk_toggle_tool_button_set_active (GTK_TOGGLE_TOOL_BUTTON (toolbar->highlight_button_green), FALSE);
                 gtk_toggle_tool_button_set_active (GTK_TOGGLE_TOOL_BUTTON (toolbar->highlight_button_magenta), FALSE);
                 gtk_toggle_tool_button_set_active (GTK_TOGGLE_TOOL_BUTTON (toolbar->underline_button), FALSE);
+                gtk_toggle_tool_button_set_active (GTK_TOGGLE_TOOL_BUTTON (toolbar->strikethrough_button), FALSE);
 	
 	} else if (button == toolbar->highlight_button_green) {
                 annot_type = EV_ANNOTATION_TYPE_TEXT_MARKUP;
@@ -105,6 +108,7 @@ ev_annotations_toolbar_annot_button_toggled (GtkWidget            *button,
                 gtk_toggle_tool_button_set_active (GTK_TOGGLE_TOOL_BUTTON (toolbar->highlight_button_yellow), FALSE);
                 gtk_toggle_tool_button_set_active (GTK_TOGGLE_TOOL_BUTTON (toolbar->highlight_button_magenta), FALSE);
                 gtk_toggle_tool_button_set_active (GTK_TOGGLE_TOOL_BUTTON (toolbar->underline_button), FALSE);
+                gtk_toggle_tool_button_set_active (GTK_TOGGLE_TOOL_BUTTON (toolbar->strikethrough_button), FALSE);
 	
 	} else if (button == toolbar->highlight_button_magenta) {
                 annot_type = EV_ANNOTATION_TYPE_TEXT_MARKUP;
@@ -115,6 +119,7 @@ ev_annotations_toolbar_annot_button_toggled (GtkWidget            *button,
                 gtk_toggle_tool_button_set_active (GTK_TOGGLE_TOOL_BUTTON (toolbar->highlight_button_green), FALSE);
                 gtk_toggle_tool_button_set_active (GTK_TOGGLE_TOOL_BUTTON (toolbar->highlight_button_yellow), FALSE);
                 gtk_toggle_tool_button_set_active (GTK_TOGGLE_TOOL_BUTTON (toolbar->underline_button), FALSE);
+                gtk_toggle_tool_button_set_active (GTK_TOGGLE_TOOL_BUTTON (toolbar->strikethrough_button), FALSE);
 	
 	} else if (button == toolbar->underline_button) {
                 annot_type = EV_ANNOTATION_TYPE_TEXT_MARKUP;
@@ -125,6 +130,18 @@ ev_annotations_toolbar_annot_button_toggled (GtkWidget            *button,
                 gtk_toggle_tool_button_set_active (GTK_TOGGLE_TOOL_BUTTON (toolbar->highlight_button_green), FALSE);
                 gtk_toggle_tool_button_set_active (GTK_TOGGLE_TOOL_BUTTON (toolbar->highlight_button_yellow), FALSE);
                 gtk_toggle_tool_button_set_active (GTK_TOGGLE_TOOL_BUTTON (toolbar->highlight_button_magenta), FALSE);
+                gtk_toggle_tool_button_set_active (GTK_TOGGLE_TOOL_BUTTON (toolbar->strikethrough_button), FALSE);
+
+	} else if (button == toolbar->strikethrough_button) {
+                annot_type = EV_ANNOTATION_TYPE_TEXT_MARKUP;
+		annot_markup_type =  EV_ANNOTATION_TEXT_MARKUP_STRIKE_OUT;
+		annot_color = EV_ANNOTATION_COLOR_NONE; //change this to black. Might not even be needed? CHange to NULL?
+                gtk_toggle_tool_button_set_active (GTK_TOGGLE_TOOL_BUTTON (toolbar->text_button), FALSE);
+               	gtk_toggle_tool_button_set_active (GTK_TOGGLE_TOOL_BUTTON (toolbar->highlight_button_cyan), FALSE);
+                gtk_toggle_tool_button_set_active (GTK_TOGGLE_TOOL_BUTTON (toolbar->highlight_button_green), FALSE);
+                gtk_toggle_tool_button_set_active (GTK_TOGGLE_TOOL_BUTTON (toolbar->highlight_button_yellow), FALSE);
+                gtk_toggle_tool_button_set_active (GTK_TOGGLE_TOOL_BUTTON (toolbar->highlight_button_magenta), FALSE);
+                gtk_toggle_tool_button_set_active (GTK_TOGGLE_TOOL_BUTTON (toolbar->underline_button), FALSE);
         
 	} else {
                 g_assert_not_reached ();
@@ -304,4 +321,5 @@ ev_annotations_toolbar_add_annot_finished (EvAnnotationsToolbar *toolbar)
         ev_annotations_toolbar_toggle_button_if_active (toolbar, GTK_TOGGLE_TOOL_BUTTON (toolbar->highlight_button_green));
         ev_annotations_toolbar_toggle_button_if_active (toolbar, GTK_TOGGLE_TOOL_BUTTON (toolbar->highlight_button_magenta));
         ev_annotations_toolbar_toggle_button_if_active (toolbar, GTK_TOGGLE_TOOL_BUTTON (toolbar->underline_button));
+        ev_annotations_toolbar_toggle_button_if_active (toolbar, GTK_TOGGLE_TOOL_BUTTON (toolbar->strikethrough_button));
 }

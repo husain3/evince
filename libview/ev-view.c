@@ -3485,8 +3485,16 @@ ev_view_annotation_color(EvView  *view)
 			color.blue = 0;
 			return color;
 			
+		} else if(view->adding_annot_info.markup_type == EV_ANNOTATION_TEXT_MARKUP_STRIKE_OUT)
+		{
+			printf("Inside ev_view_annotation_color. Setting underline color to black\n");
+			/*POSSIBLE FEATURE: MULTIPLE STRIKETHROUGH COLORS?*/
+			color.pixel = 0;
+			color.red = 0;
+			color.green = 0;
+			color.blue = 0;
+			return color;
 		}
-
 
 
 	
