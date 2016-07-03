@@ -180,7 +180,7 @@ ALL_LINGUAS =
 AMTAR = $${TAR-tar}
 AM_CFLAGS =   -Wall -Wstrict-prototypes -Wnested-externs -Werror=missing-prototypes -Werror=implicit-function-declaration -Werror=pointer-arith -Werror=init-self -Werror=format-security -Werror=format=2 -Werror=missing-include-dirs -Werror=return-type 
 AM_CPPFLAGS = 
-AM_CXXFLAGS =  -g -O2 -Wall -Wno-unused 
+AM_CXXFLAGS =  -g -Wall -Wno-unused 
 AM_DEFAULT_VERBOSITY = 0
 AM_LDFLAGS = 
 AR = ar
@@ -202,14 +202,14 @@ CATALOGS =
 CATOBJEXT = .gmo
 CC = gcc
 CCDEPMODE = depmode=gcc3
-CFLAGS = -g -O2
+CFLAGS = -g
 COMICS_MIME_TYPES = application/x-cbr;application/x-cbz;application/x-cb7;application/x-cbt;application/x-ext-cbr;application/x-ext-cbz;application/x-ext-cb7;application/x-ext-cbt
 CPP = gcc -E
 CPPFLAGS = 
 CXX = g++
 CXXCPP = g++ -E
 CXXDEPMODE = depmode=gcc3
-CXXFLAGS = -g -O2
+CXXFLAGS = -g
 CYGPATH_W = echo
 DATADIRNAME = share
 DEFS = -DHAVE_CONFIG_H
@@ -370,7 +370,7 @@ TIFF_MIME_TYPES =
 USE_NLS = yes
 VERSION = 3.21.3
 WARN_CFLAGS =  -Wall -Wstrict-prototypes -Wnested-externs -Werror=missing-prototypes -Werror=implicit-function-declaration -Werror=pointer-arith -Werror=init-self -Werror=format-security -Werror=format=2 -Werror=missing-include-dirs -Werror=return-type 
-WARN_CXXFLAGS = -g -O2 -Wall -Wno-unused 
+WARN_CXXFLAGS = -g -Wall -Wno-unused 
 WINDRES = 
 XGETTEXT = /usr/bin/xgettext
 XMLLINT = /usr/bin/xmllint

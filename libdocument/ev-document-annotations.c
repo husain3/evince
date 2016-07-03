@@ -63,7 +63,10 @@ ev_document_annotations_add_annotation (EvDocumentAnnotations *document_annots,
 	EvDocumentAnnotationsInterface *iface = EV_DOCUMENT_ANNOTATIONS_GET_IFACE (document_annots);
 
 	if (iface->add_annotation)
+	{
+		printf("Sending annotation to backend\n");		
 		iface->add_annotation (document_annots, annot, rect);
+	}
 }
 
 gboolean

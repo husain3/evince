@@ -3288,6 +3288,8 @@ pdf_document_annotations_add_annotation (EvDocumentAnnotations *document_annotat
 	GdkColor         color;
 	EvRectangle      rect;
 
+	printf("inside pdf_document_annotations_add_annotation\n");
+
 	pdf_document = PDF_DOCUMENT (document_annotations);
 	page = ev_annotation_get_page (annot);
 	poppler_page = POPPLER_PAGE (page->backend_page);

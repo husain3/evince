@@ -40,6 +40,7 @@ struct _EvAnnotationsToolbar {
 	GtkWidget *highlight_button_green;
 	GtkWidget *highlight_button_magenta;
 	GtkWidget *underline_button;
+	GtkWidget *strikethrough_button;
 };
 
 struct _EvAnnotationsToolbarClass {
@@ -118,7 +119,7 @@ ev_annotations_toolbar_annot_button_toggled (GtkWidget            *button,
 	} else if (button == toolbar->underline_button) {
                 annot_type = EV_ANNOTATION_TYPE_TEXT_MARKUP;
 		annot_markup_type =  EV_ANNOTATION_TEXT_MARKUP_UNDERLINE;
-		annot_color = EV_ANNOTATION_COLOR_GREEN; //change this to black. Might not even be needed? CHange to NULL?
+		annot_color = EV_ANNOTATION_COLOR_NONE; //change this to black. Might not even be needed? CHange to NULL?
                 gtk_toggle_tool_button_set_active (GTK_TOGGLE_TOOL_BUTTON (toolbar->text_button), FALSE);
                	gtk_toggle_tool_button_set_active (GTK_TOGGLE_TOOL_BUTTON (toolbar->highlight_button_cyan), FALSE);
                 gtk_toggle_tool_button_set_active (GTK_TOGGLE_TOOL_BUTTON (toolbar->highlight_button_green), FALSE);
@@ -194,7 +195,7 @@ ev_annotations_toolbar_init (EvAnnotationsToolbar *toolbar)
         gtk_style_context_add_class (gtk_widget_get_style_context (GTK_WIDGET (toolbar)),
                                      GTK_STYLE_CLASS_INLINE_TOOLBAR);
 
-	//Add call to new function for both new icons  
+	/* Text highlight button */  
 	ev_custom_icon_to_builtin_theme("../data/icons/22x22/actions/evince-comment-annotation.png", "evince-comment-annotation");      
 
 	toolbar->text_button = ev_annotations_toolbar_create_toggle_button (toolbar,
@@ -205,7 +206,7 @@ ev_annotations_toolbar_init (EvAnnotationsToolbar *toolbar)
 
  	ev_custom_icon_to_builtin_theme("../data/icons/22x22/actions/evince-yellow-highlight-annotation.png", "evince-yellow-highlight-annotation");       
 
-	/* FIXME: use a better icon than select-all */
+	/* Yellow highlight button */
         toolbar->highlight_button_yellow = ev_annotations_toolbar_create_toggle_button (toolbar,
                                                                                  "evince-yellow-highlight-annotation",
                                                                                  _("Yellow highlighter"));
@@ -214,7 +215,7 @@ ev_annotations_toolbar_init (EvAnnotationsToolbar *toolbar)
 
 	ev_custom_icon_to_builtin_theme("../data/icons/22x22/actions/evince-cyan-highlight-annotation.png", "evince-cyan-highlight-annotation");       
 
-	/* FIXME: use a better icon than select-all */
+	/* Blue highlight button */
         toolbar->highlight_button_cyan = ev_annotations_toolbar_create_toggle_button (toolbar,
                                                                                  "evince-cyan-highlight-annotation",
                                                                                  _("Blue highlighter"));
@@ -223,7 +224,7 @@ ev_annotations_toolbar_init (EvAnnotationsToolbar *toolbar)
 
 	ev_custom_icon_to_builtin_theme("../data/icons/22x22/actions/evince-green-highlight-annotation.png", "evince-green-highlight-annotation");       
 
-	/* FIXME: use a better icon than select-all */
+	/* Green highlight button */
         toolbar->highlight_button_green = ev_annotations_toolbar_create_toggle_button (toolbar,
                                                                                  "evince-green-highlight-annotation",
                                                                                  _("Green highlighter"));
@@ -232,19 +233,26 @@ ev_annotations_toolbar_init (EvAnnotationsToolbar *toolbar)
 
 	ev_custom_icon_to_builtin_theme("../data/icons/22x22/actions/evince-magenta-highlight-annotation.png", "evince-magenta-highlight-annotation");       
 
-	/* FIXME: use a better icon than select-all */
+	/* Pink highlight button */
         toolbar->highlight_button_magenta = ev_annotations_toolbar_create_toggle_button (toolbar,
                                                                                 "evince-magenta-highlight-annotation",
                                                                                  _("Pink highligher"));
         gtk_container_add (GTK_CONTAINER (toolbar), toolbar->highlight_button_magenta);
         gtk_widget_show (toolbar->highlight_button_magenta);
 
-	/* FIXME: use a better icon than select-all */        
+	/* Underline button */        
 	toolbar->underline_button = ev_annotations_toolbar_create_toggle_button (toolbar,
                                                                                 "format-text-underline-symbolic",
                                                                                  _("Underline"));
         gtk_container_add (GTK_CONTAINER (toolbar), toolbar->underline_button);
         gtk_widget_show (toolbar->underline_button);
+
+	/* Strikethrough button */        
+	toolbar->strikethrough_button = ev_annotations_toolbar_create_toggle_button (toolbar,
+                                                                                "format-text-strikethrough-symbolic",
+                                                                                 _("Underline"));
+        gtk_container_add (GTK_CONTAINER (toolbar), toolbar->strikethrough_button);
+        gtk_widget_show (toolbar->strikethrough_button);
 
 
 }

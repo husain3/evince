@@ -3353,7 +3353,7 @@ ev_view_create_annotation (EvView *view)
 
 
 		printf("view->adding_annot_info.markup_type %d\n", view->adding_annot_info.markup_type);
-		/*switch (view->adding_annot_info.markup_type) {
+		switch (view->adding_annot_info.markup_type) {
 		case EV_ANNOTATION_TEXT_MARKUP_HIGHLIGHT:
 			annot = ev_annotation_text_markup_highlight_new (page);
 			break;
@@ -3369,8 +3369,8 @@ ev_view_create_annotation (EvView *view)
 		case EV_ANNOTATION_TEXT_MARKUP_NONE:
 			printf("Error: Cannot have markup with no markup type.\n");
 			break;
-		}*/
-		annot = ev_annotation_text_markup_highlight_new (page);
+		}
+		//annot = ev_annotation_text_markup_highlight_new (page);
 		break;
 		
 	/*insert underline case here*/
@@ -3434,44 +3434,62 @@ ev_view_annotation_color(EvView  *view)
 	
 	} else if (view->adding_annot_info.type == EV_ANNOTATION_TYPE_TEXT_MARKUP)
 	{	
-		if(view->adding_annot_info.color == EV_ANNOTATION_COLOR_YELLOW)
+		if(view->adding_annot_info.markup_type == EV_ANNOTATION_TEXT_MARKUP_HIGHLIGHT)
 		{
+			if(view->adding_annot_info.color == EV_ANNOTATION_COLOR_YELLOW)
+			{
 
-			color.pixel = 0;
-			color.red = 65535;
-			color.green = 65535;
-			color.blue = 0;
-			return color;
+				color.pixel = 0;
+				color.red = 65535;
+				color.green = 65535;
+				color.blue = 0;
+				return color;
 
-		} else if (view->adding_annot_info.color == EV_ANNOTATION_COLOR_CYAN) 
+			} else if (view->adding_annot_info.color == EV_ANNOTATION_COLOR_CYAN) 
+			{
+
+				color.pixel = 0;
+				color.red = 0;
+				color.green = 65535;
+				color.blue = 65535;
+				return color;
+
+			} else if (view->adding_annot_info.color == EV_ANNOTATION_COLOR_GREEN) 
+			{
+
+				color.pixel = 0;
+				color.red = 0;
+				color.green = 65535;
+				color.blue = 0;
+				return color;
+
+			} else if (view->adding_annot_info.color == EV_ANNOTATION_COLOR_MAGENTA) 
+			{
+
+				color.pixel = 0;
+				color.red = 65535;
+				color.green = 0;
+				color.blue = 65535;
+				return color;
+			}
+
+
+
+		} else if(view->adding_annot_info.markup_type == EV_ANNOTATION_TEXT_MARKUP_UNDERLINE)
 		{
-
+			printf("Inside ev_view_annotation_color. Setting underline color to black\n");
+			/*POSSIBLE FEATURE: MULTIPLE UNDERLINE COLORS?*/
 			color.pixel = 0;
 			color.red = 0;
-			color.green = 65535;
-			color.blue = 65535;
-			return color;
-
-		} else if (view->adding_annot_info.color == EV_ANNOTATION_COLOR_GREEN) 
-		{
-
-			color.pixel = 0;
-			color.red = 0;
-			color.green = 65535;
-			color.blue = 0;
-			return color;
-
-		} else if (view->adding_annot_info.color == EV_ANNOTATION_COLOR_MAGENTA) 
-		{
-
-			color.pixel = 0;
-			color.red = 65535;
 			color.green = 0;
-			color.blue = 65535;
+			color.blue = 0;
 			return color;
-
+			
 		}
 
+
+
+	
 	}
 
 	color.pixel = 0;
