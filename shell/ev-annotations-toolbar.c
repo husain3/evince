@@ -124,7 +124,7 @@ ev_annotations_toolbar_annot_button_toggled (GtkWidget            *button,
 	} else if (button == toolbar->underline_button) {
                 annot_type = EV_ANNOTATION_TYPE_TEXT_MARKUP;
 		annot_markup_type =  EV_ANNOTATION_TEXT_MARKUP_UNDERLINE;
-		annot_color = EV_ANNOTATION_COLOR_NONE; //change this to black. Might not even be needed? CHange to NULL?
+		annot_color = EV_ANNOTATION_COLOR_NONE; 
                 gtk_toggle_tool_button_set_active (GTK_TOGGLE_TOOL_BUTTON (toolbar->text_button), FALSE);
                	gtk_toggle_tool_button_set_active (GTK_TOGGLE_TOOL_BUTTON (toolbar->highlight_button_cyan), FALSE);
                 gtk_toggle_tool_button_set_active (GTK_TOGGLE_TOOL_BUTTON (toolbar->highlight_button_green), FALSE);
@@ -135,7 +135,7 @@ ev_annotations_toolbar_annot_button_toggled (GtkWidget            *button,
 	} else if (button == toolbar->strikethrough_button) {
                 annot_type = EV_ANNOTATION_TYPE_TEXT_MARKUP;
 		annot_markup_type =  EV_ANNOTATION_TEXT_MARKUP_STRIKE_OUT;
-		annot_color = EV_ANNOTATION_COLOR_NONE; //change this to black. Might not even be needed? CHange to NULL?
+		annot_color = EV_ANNOTATION_COLOR_NONE; 
                 gtk_toggle_tool_button_set_active (GTK_TOGGLE_TOOL_BUTTON (toolbar->text_button), FALSE);
                	gtk_toggle_tool_button_set_active (GTK_TOGGLE_TOOL_BUTTON (toolbar->highlight_button_cyan), FALSE);
                 gtk_toggle_tool_button_set_active (GTK_TOGGLE_TOOL_BUTTON (toolbar->highlight_button_green), FALSE);
@@ -239,14 +239,6 @@ ev_annotations_toolbar_init (EvAnnotationsToolbar *toolbar)
         gtk_container_add (GTK_CONTAINER (toolbar), toolbar->highlight_button_cyan);
         gtk_widget_show (toolbar->highlight_button_cyan);
 
-	ev_custom_icon_to_builtin_theme("../data/icons/22x22/actions/evince-green-highlight-annotation.png", "evince-green-highlight-annotation");       
-
-	/* Green highlight button */
-        toolbar->highlight_button_green = ev_annotations_toolbar_create_toggle_button (toolbar,
-                                                                                 "evince-green-highlight-annotation",
-                                                                                 _("Green highlighter"));
-        gtk_container_add (GTK_CONTAINER (toolbar), toolbar->highlight_button_green);
-        gtk_widget_show (toolbar->highlight_button_green);
 
 	ev_custom_icon_to_builtin_theme("../data/icons/22x22/actions/evince-magenta-highlight-annotation.png", "evince-magenta-highlight-annotation");       
 
@@ -257,16 +249,30 @@ ev_annotations_toolbar_init (EvAnnotationsToolbar *toolbar)
         gtk_container_add (GTK_CONTAINER (toolbar), toolbar->highlight_button_magenta);
         gtk_widget_show (toolbar->highlight_button_magenta);
 
-	/* Underline button */        
+	ev_custom_icon_to_builtin_theme("../data/icons/22x22/actions/evince-green-highlight-annotation.png", "evince-green-highlight-annotation");       
+
+	/* Green highlight button */
+        toolbar->highlight_button_green = ev_annotations_toolbar_create_toggle_button (toolbar,
+                                                                                 "evince-green-highlight-annotation",
+                                                                                 _("Green highlighter"));
+        gtk_container_add (GTK_CONTAINER (toolbar), toolbar->highlight_button_green);
+        gtk_widget_show (toolbar->highlight_button_green);
+
+	/* Underline button */   
+
+	ev_custom_icon_to_builtin_theme("../data/icons/22x22/actions/evince-format-text-underline.png", "evince-format-text-underline");      
+	
 	toolbar->underline_button = ev_annotations_toolbar_create_toggle_button (toolbar,
-                                                                                "format-text-underline-symbolic",
+                                                                                "evince-format-text-underline",
                                                                                  _("Underline"));
         gtk_container_add (GTK_CONTAINER (toolbar), toolbar->underline_button);
         gtk_widget_show (toolbar->underline_button);
 
-	/* Strikethrough button */        
+	/* Strikethrough button */   
+	ev_custom_icon_to_builtin_theme("../data/icons/22x22/actions/evince-format-text-strikethrough.png", "evince-format-text-strikethrough"); 
+     
 	toolbar->strikethrough_button = ev_annotations_toolbar_create_toggle_button (toolbar,
-                                                                                "format-text-strikethrough-symbolic",
+                                                                                "evince-format-text-strikethrough",
                                                                                  _("Underline"));
         gtk_container_add (GTK_CONTAINER (toolbar), toolbar->strikethrough_button);
         gtk_widget_show (toolbar->strikethrough_button);

@@ -3288,7 +3288,7 @@ pdf_document_annotations_add_annotation (EvDocumentAnnotations *document_annotat
 	GdkColor         color;
 	EvRectangle      rect;
 
-	printf("inside pdf_document_annotations_add_annotation\n");
+
 
 	pdf_document = PDF_DOCUMENT (document_annotations);
 	page = ev_annotation_get_page (annot);
@@ -3333,7 +3333,7 @@ pdf_document_annotations_add_annotation (EvDocumentAnnotations *document_annotat
 					poppler_annot = poppler_annot_text_markup_new_squiggly (pdf_document->document, &poppler_rect, quads);
 					break;
 				case EV_ANNOTATION_TEXT_MARKUP_NONE:
-					printf("Error: No text markup type specified\n");
+					//printf("Error: No text markup type specified\n");
 					break;
 				default:
 					g_assert_not_reached ();

@@ -245,10 +245,10 @@ ev_toolbar_constructed (GObject *object)
         /* Edit Annots */
         /* FIXME: Use a better icon for edit than text editor */
         
-	ev_custom_icon_to_builtin_theme("../data/icons/scalable/actions/evince-annotation.svg", "evince-annotation"); 
+	//ev_custom_icon_to_builtin_theme("../data/icons/scalable/actions/evince-annotation.svg", "evince-annotation"); 
 
 
-	button = ev_toolbar_create_toggle_button (ev_toolbar, "win.toggle-edit-annots", "evince-annotation",
+	button = ev_toolbar_create_toggle_button (ev_toolbar, "win.toggle-edit-annots", "text-editor-symbolic",
                                                   _("Annotate the document"));
         ev_toolbar->priv->annots_button = button;
         gtk_widget_set_margin_end (button, 6);

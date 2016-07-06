@@ -595,6 +595,9 @@ GtkWidget *
 ev_annotation_window_new (EvAnnotation *annot,
 			  GtkWindow    *parent)
 {
+	
+
+
 	GtkWidget *window;
 
 	g_return_val_if_fail (EV_IS_ANNOTATION_MARKUP (annot), NULL);

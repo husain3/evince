@@ -1417,7 +1417,6 @@ ev_annotation_text_markup_init (EvAnnotationTextMarkup *annot)
 static void
 ev_annotation_text_markup_class_init (EvAnnotationTextMarkupClass *class)
 {
-	printf("inside 'ev_annotation_text_markup_class_init'\n");
 	GObjectClass *g_object_class = G_OBJECT_CLASS (class);
 
 	ev_annotation_markup_class_install_properties (g_object_class);
@@ -1449,7 +1448,6 @@ ev_annotation_text_markup_highlight_new (EvPage *page)
                                                            "page", page,
                                                            "type", EV_ANNOTATION_TEXT_MARKUP_HIGHLIGHT,
                                                            NULL));
-	printf("highlight new type %d\n", EV_ANNOTATION_TEXT_MARKUP (annot)->type);        
 	return annot;
 }
 
@@ -1470,8 +1468,7 @@ ev_annotation_text_markup_underline_new (EvPage *page)
                                                            "page", page,
                                                            "type", EV_ANNOTATION_TEXT_MARKUP_UNDERLINE,
                                                            NULL));
-	printf("Inside 'ev_annotation_text_markup_underline_new'\n");
-	printf("underline new type %d\n", EV_ANNOTATION_TEXT_MARKUP (annot)->type);                
+                
 	return annot;
 }
 

@@ -3096,6 +3096,26 @@ ev_view_create_annotation_window (EvView       *view,
 	EvRectangle  doc_rect;
 	GdkRectangle view_rect;
 	guint        page;
+	GdkColor     color;
+
+	//color = ev_view_annotation_color(view);
+	//printf("red: %d\n green %d\n blue %d\n", color.red, color.green, color.blue);
+	/*printf("HELLO WORLD %d\n", annot->type);
+	if(view->adding_annot_info.type == EV_ANNOTATION_TYPE_TEXT_MARKUP)
+	{
+		printf("view->adding_annot_info.type %d", view->adding_annot_info.type);
+	}*/
+
+
+	ev_annotation_get_color(annot, &color);
+	
+	if(color.red == 0.0 && color.green == 0.0 && color.blue == 0.0)
+	{
+		color.red = 65535;
+		color.green = 65535;
+		ev_annotation_set_color(annot, &color);
+	}
+
 
 	window = ev_annotation_window_new (annot, parent);
 	g_signal_connect (window, "grab_focus",
@@ -3253,11 +3273,13 @@ ev_view_handle_annotation (EvView       *view,
 			   gdouble       y,
 			   guint32       timestamp)
 {
+
 	if (EV_IS_ANNOTATION_MARKUP (annot)) {
 		GtkWidget *window;
 
 		window = g_object_get_data (G_OBJECT (annot), "popup");
 		if (!window && ev_annotation_markup_can_have_popup (EV_ANNOTATION_MARKUP (annot))) {
+
 			EvRectangle    popup_rect;
 			GtkWindow     *parent;
 			EvMappingList *annots;
@@ -3315,7 +3337,6 @@ ev_view_create_annotation (EvView *view)
 	GtkBorder       border;
 	EvRectangle     doc_rect, popup_rect;
 	EvPage         *page;
-	/*Add function call (with EvView annotation color argument) here that returns GdkColor to set highlight color here*/
 	GdkColor        color;
 	GdkRectangle    view_rect;
 	cairo_region_t *region;
@@ -3352,7 +3373,6 @@ ev_view_create_annotation (EvView *view)
 		doc_rect.y2 = end.y;
 
 
-		printf("view->adding_annot_info.markup_type %d\n", view->adding_annot_info.markup_type);
 		switch (view->adding_annot_info.markup_type) {
 		case EV_ANNOTATION_TEXT_MARKUP_HIGHLIGHT:
 			annot = ev_annotation_text_markup_highlight_new (page);
@@ -3370,7 +3390,6 @@ ev_view_create_annotation (EvView *view)
 			printf("Error: Cannot have markup with no markup type.\n");
 			break;
 		}
-		//annot = ev_annotation_text_markup_highlight_new (page);
 		break;
 		
 	/*insert underline case here*/
@@ -3477,7 +3496,6 @@ ev_view_annotation_color(EvView  *view)
 
 		} else if(view->adding_annot_info.markup_type == EV_ANNOTATION_TEXT_MARKUP_UNDERLINE)
 		{
-			printf("Inside ev_view_annotation_color. Setting underline color to black\n");
 			/*POSSIBLE FEATURE: MULTIPLE UNDERLINE COLORS?*/
 			color.pixel = 0;
 			color.red = 0;
@@ -3487,7 +3505,6 @@ ev_view_annotation_color(EvView  *view)
 			
 		} else if(view->adding_annot_info.markup_type == EV_ANNOTATION_TEXT_MARKUP_STRIKE_OUT)
 		{
-			printf("Inside ev_view_annotation_color. Setting underline color to black\n");
 			/*POSSIBLE FEATURE: MULTIPLE STRIKETHROUGH COLORS?*/
 			color.pixel = 0;
 			color.red = 0;
@@ -3535,7 +3552,6 @@ ev_view_begin_add_annotation (EvView          *view,
 	view->adding_annot_info.adding_annot = TRUE;
 	view->adding_annot_info.type = annot_type;
 
-	printf("ev_view_begin_add_annotation: annot_markup_type %d", annot_markup_type);
 	view->adding_annot_info.markup_type = annot_markup_type;
 
 	/*add color to struct here*/
@@ -5791,7 +5807,6 @@ ev_view_button_release_event (GtkWidget      *widget,
 			GtkWidget  *window;
 			EvRectangle area;
 			EvRectangle popup_rect;
-
 			ev_annotation_get_area (view->adding_annot_info.annot, &area);
 
 			if (area.x1 == 0 && area.y1 == 0 && area.x2 == 0 && area.y2 == 0) {
