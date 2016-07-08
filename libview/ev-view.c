@@ -23,6 +23,7 @@
 #include <stdlib.h>
 #include <math.h>
 #include <string.h>
+#include <ctype.h>
 
 #include <glib/gi18n-lib.h>
 #include <gtk/gtk.h>
@@ -2142,6 +2143,7 @@ ev_view_handle_cursor_over_xy (EvView *view, gint x, gint y)
 		else
 			ev_view_set_cursor (view, EV_VIEW_CURSOR_NORMAL);
 	} else if ((annot = ev_view_get_annotation_at_location (view, x, y))) {
+		printf("about to show annotation preview\n");
 		ev_view_set_cursor (view, EV_VIEW_CURSOR_LINK);
 	} else if (location_in_text (view, x + view->scroll_x, y + view->scroll_y)) {
 		ev_view_set_cursor (view, EV_VIEW_CURSOR_IBEAM);
@@ -2155,7 +2157,10 @@ ev_view_handle_cursor_over_xy (EvView *view, gint x, gint y)
 	}
 
 	if (link || annot)
+	{
+		//printf("HELLO %s\n", view->adding_annot_info.annot->contents);
 		g_object_set (view, "has-tooltip", TRUE, NULL);
+	}
 }
 
 /*** Images ***/
@@ -4881,9 +4886,28 @@ ev_view_query_tooltip (GtkWidget  *widget,
 	annot = ev_view_get_annotation_at_location (view, x, y);
 	if (annot) {
 		const gchar *contents;
-
+		int string_not_empty = 0;
 		if ((contents = ev_annotation_get_contents (annot))) {
 			GdkRectangle annot_area;
+			if (contents[0] == '\0') {
+				printf("comment annotation empty, will not show tooltip\n");
+				return FALSE;
+			} else {
+				for(int i = 0; i < sizeof(contents); i++)
+				{
+					if(!isspace(contents[i]))
+					{
+						string_not_empty = 1;
+						break;
+					}
+				}
+				if(string_not_empty == 0)
+				{
+					printf("comment annotation has lots of whitespace, will not show tooltip\n");					
+					return FALSE;
+				}			
+			}
+
 
 			get_annot_area (view, x, y, annot, &annot_area);
 			gtk_tooltip_set_text (tooltip, contents);
@@ -5752,6 +5776,7 @@ ev_view_motion_notify_event (GtkWidget      *widget,
 
 		break;
 	default:
+		printf("hit default\n");
 		ev_view_handle_cursor_over_xy (view, x, y);
 	} 
 
@@ -9528,6 +9553,7 @@ ev_view_set_cursor (EvView *view, EvViewCursor new_cursor)
 	window = gtk_widget_get_window (GTK_WIDGET (view));
 	widget = gtk_widget_get_toplevel (GTK_WIDGET (view));
 	cursor = ev_view_cursor_new (gtk_widget_get_display (widget), new_cursor);
+	/*check if annotation is empty and dont show it*/
 	gdk_window_set_cursor (window, cursor);
 	gdk_flush ();
 	if (cursor)
