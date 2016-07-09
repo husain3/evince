@@ -2143,7 +2143,6 @@ ev_view_handle_cursor_over_xy (EvView *view, gint x, gint y)
 		else
 			ev_view_set_cursor (view, EV_VIEW_CURSOR_NORMAL);
 	} else if ((annot = ev_view_get_annotation_at_location (view, x, y))) {
-		printf("about to show annotation preview\n");
 		ev_view_set_cursor (view, EV_VIEW_CURSOR_LINK);
 	} else if (location_in_text (view, x + view->scroll_x, y + view->scroll_y)) {
 		ev_view_set_cursor (view, EV_VIEW_CURSOR_IBEAM);
@@ -4890,7 +4889,6 @@ ev_view_query_tooltip (GtkWidget  *widget,
 		if ((contents = ev_annotation_get_contents (annot))) {
 			GdkRectangle annot_area;
 			if (contents[0] == '\0') {
-				printf("comment annotation empty, will not show tooltip\n");
 				return FALSE;
 			} else {
 				for(int i = 0; i < sizeof(contents); i++)
@@ -4902,8 +4900,7 @@ ev_view_query_tooltip (GtkWidget  *widget,
 					}
 				}
 				if(string_not_empty == 0)
-				{
-					printf("comment annotation has lots of whitespace, will not show tooltip\n");					
+				{					
 					return FALSE;
 				}			
 			}
@@ -5776,7 +5773,6 @@ ev_view_motion_notify_event (GtkWidget      *widget,
 
 		break;
 	default:
-		printf("hit default\n");
 		ev_view_handle_cursor_over_xy (view, x, y);
 	} 
 
