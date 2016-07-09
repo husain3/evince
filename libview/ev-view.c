@@ -3492,8 +3492,8 @@ ev_view_annotation_color(EvView  *view)
 
 				color.pixel = 0;
 				color.red = 65535;
-				color.green = 0;
-				color.blue = 65535;
+				color.green = 37522;
+				color.blue = 63993;
 				return color;
 			}
 
