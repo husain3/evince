@@ -6476,11 +6476,17 @@ ev_view_key_press_event (GtkWidget   *widget,
 	EvView  *view = EV_VIEW (widget);
 	gboolean retval;
 
-	if (!view->document)
-		return FALSE;
+	printf("Inside ev_view_key_press_event\n");
 
-	if (!gtk_widget_has_focus (widget))
+	if (!view->document) {
+		printf("ev_view_key_press_event RETURN FALSE\n");
+		return FALSE;
+	}
+
+	if (!gtk_widget_has_focus (widget)) {
+		printf("ev_view_key_press_event CALLING ev_view_forward_key_event_to_focused_child\n");
 		return ev_view_forward_key_event_to_focused_child (view, event);
+	}
 
 	/* I expected GTK+ do this for me, but it doesn't cancel
 	 * the propagation of bindings handled for the same binding set
@@ -6488,6 +6494,7 @@ ev_view_key_press_event (GtkWidget   *widget,
 	view->key_binding_handled = FALSE;
 	retval = gtk_bindings_activate_event (G_OBJECT (widget), event);
 	view->key_binding_handled = FALSE;
+	printf("ev_view_key_press_event KEY BINDING NOT HANDLED\n");
 
 	return retval;
 }
@@ -6520,6 +6527,8 @@ current_event_is_space_key_press (void)
 	GdkEvent *current_event;
 	guint     keyval;
 	gboolean  is_space_key_press;
+
+	printf("inside current_event_is_space_key_press\n");
 
 	current_event = gtk_get_current_event ();
 	if (!current_event)

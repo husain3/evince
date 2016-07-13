@@ -187,6 +187,8 @@ ev_annotation_window_dispose (GObject *object)
 {
 	EvAnnotationWindow *window = EV_ANNOTATION_WINDOW (object);
 
+	printf("inside ev_annotation_window_dispose\n");	
+
 	if (window->annotation) {
 		ev_annotation_window_sync_contents (window);
 		g_object_unref (window->annotation);
@@ -512,6 +514,8 @@ ev_annotation_window_focus_in_event (GtkWidget     *widget,
 {
 	EvAnnotationWindow *window = EV_ANNOTATION_WINDOW (widget);
 
+	printf("Inside ev_annotation_window_focus_in_event\n");		
+
 	if (window->in_move) {
 		if (window->orig_x != window->x || window->orig_y != window->y) {
 			window->orig_x = window->x;
@@ -534,9 +538,27 @@ ev_annotation_window_focus_out_event (GtkWidget     *widget,
 {
 	EvAnnotationWindow *window = EV_ANNOTATION_WINDOW (widget);
 
+	printf("Inside ev_annotation_window_focus_out_event\n");	
+
+	//ev_annotation_window_sync_contents (window);
+
+	return FALSE;
+}
+
+static gboolean
+ev_annotation_window_key_release_event (GtkWidget     *widget,
+				      GdkEventKey *event)
+{
+	
+	EvAnnotationWindow *window = EV_ANNOTATION_WINDOW (widget);
+
+	printf("inside ev_annotation_window_key_release_event\n");
+
 	ev_annotation_window_sync_contents (window);
 
 	return FALSE;
+
+
 }
 
 static void
@@ -552,6 +574,8 @@ ev_annotation_window_class_init (EvAnnotationWindowClass *klass)
 	gtk_widget_class->configure_event = ev_annotation_window_configure_event;
 	gtk_widget_class->focus_in_event = ev_annotation_window_focus_in_event;
 	gtk_widget_class->focus_out_event = ev_annotation_window_focus_out_event;
+	gtk_widget_class->key_release_event = ev_annotation_window_key_release_event;
+	
 
 	g_object_class_install_property (g_object_class,
 					 PROP_ANNOTATION,
@@ -637,6 +661,8 @@ ev_annotation_window_set_annotation (EvAnnotationWindow *window,
 gboolean
 ev_annotation_window_is_open (EvAnnotationWindow *window)
 {
+	printf("ev_annotation_window_is_open\n");	
+
 	g_return_val_if_fail (EV_IS_ANNOTATION_WINDOW (window), FALSE);
 
 	return window->is_open;
@@ -665,6 +691,8 @@ ev_annotation_window_set_rectangle (EvAnnotationWindow *window,
 void
 ev_annotation_window_grab_focus (EvAnnotationWindow *window)
 {
+	printf("ev_annotation_window_grab_focus\n");	
+
 	g_return_if_fail (EV_IS_ANNOTATION_WINDOW (window));
 
 	if (!gtk_widget_has_focus (window->text_view)) {
@@ -676,6 +704,8 @@ ev_annotation_window_grab_focus (EvAnnotationWindow *window)
 void
 ev_annotation_window_ungrab_focus (EvAnnotationWindow *window)
 {
+	
+	printf("ev_annotation_window_ungrab_focus\n");
 	g_return_if_fail (EV_IS_ANNOTATION_WINDOW (window));
 
 	if (gtk_widget_has_focus (window->text_view)) {
