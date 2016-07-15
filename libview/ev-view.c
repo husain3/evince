@@ -3515,6 +3515,16 @@ ev_view_annotation_color(EvView  *view)
 			color.green = 0;
 			color.blue = 0;
 			return color;
+		
+		} else if(view->adding_annot_info.markup_type == EV_ANNOTATION_TEXT_MARKUP_SQUIGGLY)
+		{
+			printf("SETTING COLOR FOR EV_ANNOTATION_TEXT_MARKUP_SQUIGGLY\n");
+			/*POSSIBLE FEATURE: MULTIPLE SQUIGGLY COLORS?*/
+			color.pixel = 0;
+			color.red = 0;
+			color.green = 0;
+			color.blue = 0;
+			return color;
 		}
 
 
