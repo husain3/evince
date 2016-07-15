@@ -297,10 +297,10 @@ ev_annotations_toolbar_init (EvAnnotationsToolbar *toolbar)
         gtk_widget_show (toolbar->strikethrough_button);
 
 	/* Strikethrough button */   
-	ev_custom_icon_to_builtin_theme("../data/icons/22x22/actions/evince-format-text-strikethrough.png", "evince-format-text-strikethrough"); 
+	ev_custom_icon_to_builtin_theme("../data/icons/22x22/actions/evince-format-text-squiggly.png", "evince-format-text-squiggly"); 
      
 	toolbar->squiggly_button = ev_annotations_toolbar_create_toggle_button (toolbar,
-                                                                                "evince-format-text-strikethrough",
+                                                                                "evince-format-text-squiggly",
                                                                                  _("Squiggly"));
         gtk_container_add (GTK_CONTAINER (toolbar), toolbar->squiggly_button);
         gtk_widget_show (toolbar->squiggly_button);
