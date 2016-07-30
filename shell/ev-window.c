@@ -5714,6 +5714,7 @@ view_annot_added (EvView       *view,
 		  EvAnnotation *annot,
 		  EvWindow     *window)
 {
+	printf("INSIDE annot-added\n");
 	ev_sidebar_annotations_annot_added (EV_SIDEBAR_ANNOTATIONS (window->priv->sidebar_annots),
 					    annot);
 	ev_annotations_toolbar_add_annot_finished (EV_ANNOTATIONS_TOOLBAR (window->priv->annots_toolbar));

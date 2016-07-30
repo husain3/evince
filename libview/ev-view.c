@@ -1366,6 +1366,9 @@ _ev_view_transform_view_point_to_doc_point (EvView       *view,
 {
 	*doc_point_x = MAX ((double) (view_point->x - page_area->x - border->left) / view->scale, 0);
 	*doc_point_y = MAX ((double) (view_point->y - page_area->y - border->right) / view->scale, 0);
+	/*printf("GdkPoint x: %d, y: %d\n", view_point->y, view_point->y);
+	printf("GdkRectangle x: %d, y: %d, width: %d, height: %d\n", page_area->x, page_area->y, page_area->width, page_area->height);
+	printf("GdkBorder left: %d, right: %d, top: %d, bottom: %d\n", border->left, border->right, border->top, border->bottom);*/
 }
 
 void
@@ -3362,7 +3365,9 @@ ev_view_create_annotation (EvView *view)
 
 	ev_document_doc_mutex_lock ();
 	page = ev_document_get_page (view->document, annot_page);
-        switch (view->adding_annot_info.type) {
+        //printf("INSIDE CREATE ANNOT: start.x = %f\n", start.x);
+        //printf("INSIDE CREATE ANNOT: start.y = %f\n", start.y);
+	switch (view->adding_annot_info.type) {
         case EV_ANNOTATION_TYPE_TEXT:
                 doc_rect.x1 = end.x;
                 doc_rect.y1 = end.y;
@@ -3379,6 +3384,7 @@ ev_view_create_annotation (EvView *view)
 
 		switch (view->adding_annot_info.markup_type) {
 		case EV_ANNOTATION_TEXT_MARKUP_HIGHLIGHT:
+			//printf("CREATING NEW HIGHLIGHT ANNOT\n");
 			annot = ev_annotation_text_markup_highlight_new (page);
 			break;
 		case EV_ANNOTATION_TEXT_MARKUP_STRIKE_OUT:
@@ -3407,10 +3413,19 @@ ev_view_create_annotation (EvView *view)
 	}
 	g_object_unref (page);
 
-	ev_annotation_set_area (annot, &doc_rect);
+	if(view->adding_annot_info.text_preselected == 1)
+	{
+		ev_annotation_set_preselected_area(annot, &doc_rect);
+	} else {
+		ev_annotation_set_area (annot, &doc_rect);
+	}
+
+	//ev_annotation_set_area (annot, &doc_rect);
+	//printf("SETTING ANNOTATION AREA\n");
 	ev_annotation_set_color (annot, &color);
 
 	if (EV_IS_ANNOTATION_MARKUP (annot)) {
+		//printf("Passed: EV_IS_ANNOTATION_MARKUP (annot)");
 		popup_rect.x1 = doc_rect.x2;
 		popup_rect.x2 = popup_rect.x1 + ANNOT_POPUP_WINDOW_DEFAULT_WIDTH;
 		popup_rect.y1 = doc_rect.y2;
@@ -3440,6 +3455,7 @@ ev_view_create_annotation (EvView *view)
 
 	view->adding_annot_info.annot = annot;
 	ev_view_set_cursor (view, EV_VIEW_CURSOR_NORMAL);
+	//printf("REACHED THE END OF CREATE ANNOTATION\n");
 }
 
 GdkColor 
@@ -3557,6 +3573,10 @@ ev_view_begin_add_annotation (EvView          *view,
 			      EvAnnotationTextMarkupType annot_markup_type,
 			      EvAnnotationColor annot_color)
 {
+		//printf("view->selection_info.start.x: %d, view->selection_info.start.y: %d\n", view->selection_info.start.x, view->selection_info.start.y);
+
+		//printf("motion.x: %d, motion.y: %d\n", view->motion.x, view->motion.y);
+
 	if (annot_type == EV_ANNOTATION_TYPE_UNKNOWN)
 		return;
 
@@ -3571,6 +3591,133 @@ ev_view_begin_add_annotation (EvView          *view,
 	/*add color to struct here*/
 	view->adding_annot_info.color = annot_color;
 
+	printf("view->selection_info.style %d\n", view->selection_info.style);
+
+	/*IF */
+	if((view->motion.x > 0 && view->motion.y > 0) || (view->selection_info.style > 0))
+	{
+		printf("HI THERE\n");
+		EvRectangle  rect;		
+		GtkWindow  *parent;
+		GtkWidget  *window;
+		EvPoint      start;
+		EvPoint      end;
+		GdkRectangle page_area;
+		GtkBorder    border;
+		guint        annot_page;
+		EvViewSelection *selection;
+		GList *list;
+
+		EvRectangle area;
+		EvRectangle popup_rect;
+
+		view->adding_annot_info.text_preselected = 1;
+		
+		if(view->selection_info.style > 0)
+		{
+			
+
+			view->adding_annot_info.start.x = view->annot_selection_start.x;
+			view->adding_annot_info.start.y = view->annot_selection_start.y;
+			
+			/*Need to add 5 to make sure highlight doesn't annotate words in the line above*/
+			view->adding_annot_info.start.y += 5;
+			
+			view->adding_annot_info.stop.x = view->annot_selection_stop.x;
+			view->adding_annot_info.stop.y = view->annot_selection_stop.y;
+		} else {
+			view->adding_annot_info.start.x = view->selection_info.start.x;
+			view->adding_annot_info.start.y = view->selection_info.start.y;
+	
+
+			view->adding_annot_info.stop.x = view->motion.x;
+			view->adding_annot_info.stop.y = view->motion.y;
+		}
+		
+		//printf("y coordinate difference %d\n", view->adding_annot_info.stop.y - view->adding_annot_info.start.y);
+		printf("Before: start.x %d | start.y %d | stop.x %d | stop.y %d\n", view->adding_annot_info.start.x, view->adding_annot_info.start.y, view->adding_annot_info.stop.x, view->adding_annot_info.stop.y);
+		ev_view_create_annotation (view);		
+	
+		annot_page = ev_annotation_get_page_index (view->adding_annot_info.annot);
+		ev_view_get_page_extents (view, annot_page, &page_area, &border);
+		//g_list_last (view->selection_info.selections);
+		list = view->selection_info.selections->data;
+		if (list == NULL)
+		{
+			printf("NULL\n");
+		}
+
+		_ev_view_transform_view_point_to_doc_point (view, &view->adding_annot_info.start, &page_area, &border,
+							    &start.x, &start.y);
+		_ev_view_transform_view_point_to_doc_point (view, &view->adding_annot_info.stop, &page_area, &border,
+							    &end.x, &end.y);
+		
+	
+		//printf("y coordinate difference %f\n", end.y - start.y);
+		
+		switch (view->adding_annot_info.type) {
+			//case EV_ANNOTATION_TYPE_TEXT:
+				//rect.x1 = end.x;
+				//rect.y1 = end.y;
+				//rect.x2 = rect.x1 + current_area.x2 - current_area.x1;
+				//rect.y2 = rect.y1 + current_area.y2 - current_area.y1;
+				//break;
+			case EV_ANNOTATION_TYPE_TEXT_MARKUP:
+				rect.x1 = start.x;
+				rect.y1 = start.y;
+				rect.x2 = end.x;
+				rect.y2 = end.y;
+				break;
+			default:
+				g_assert_not_reached ();
+			}
+		
+
+		ev_document_doc_mutex_lock ();
+		ev_annotation_set_area (view->adding_annot_info.annot, &rect);
+		ev_document_annotations_save_annotation (EV_DOCUMENT_ANNOTATIONS (view->document),
+								 view->adding_annot_info.annot,
+								 EV_ANNOTATIONS_SAVE_AREA);
+		
+		ev_document_doc_mutex_unlock ();	
+
+
+		//printf("Before: start.x %d | start.y %d | stop.x %d | stop.y %d\n", view->adding_annot_info.start.x, view->adding_annot_info.start.y, view->adding_annot_info.stop.x, view->adding_annot_info.stop.y);
+		//printf("After: start.x %f | start.y %f | stop.x %f | stop.y %f\n", start.x, start.y, end.x, end.y);
+
+		ev_annotation_get_area (view->adding_annot_info.annot, &area);
+
+		popup_rect.x1 = area.x2;
+		popup_rect.x2 = popup_rect.x1 + ANNOT_POPUP_WINDOW_DEFAULT_WIDTH;
+		popup_rect.y1 = area.y2;
+		popup_rect.y2 = popup_rect.y1 + ANNOT_POPUP_WINDOW_DEFAULT_HEIGHT;
+
+		if (ev_annotation_markup_set_rectangle (EV_ANNOTATION_MARKUP (view->adding_annot_info.annot),
+							&popup_rect)) {
+			//printf("SETTING RECTANGLE\n");
+			ev_document_doc_mutex_lock ();
+			ev_document_annotations_save_annotation (EV_DOCUMENT_ANNOTATIONS (view->document),
+								 view->adding_annot_info.annot,
+								 EV_ANNOTATIONS_SAVE_POPUP_RECT);
+			ev_document_doc_mutex_unlock ();
+		}
+		
+		
+		
+
+
+		parent = GTK_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (view)));
+		window = ev_view_create_annotation_window (view, view->adding_annot_info.annot, parent);
+		g_signal_emit (view, signals[SIGNAL_ANNOT_ADDED], 0, view->adding_annot_info.annot);
+		
+		view->adding_annot_info.adding_annot = FALSE;		
+		view->adding_annot_info.annot = NULL;
+		//clear_selection (view);
+		printf("REACHED END OF BEGIN ADD ANNOTATION\n");
+		return;
+	}
+
+	view->adding_annot_info.text_preselected = 0;
 	ev_view_set_cursor (view, EV_VIEW_CURSOR_ADD);
 }
 
@@ -4953,6 +5100,9 @@ start_selection_for_event (EvView         *view,
 	view->selection_info.start.x = event->x + view->scroll_x;
 	view->selection_info.start.y = event->y + view->scroll_y;
 
+	//printf("view->selection_info.start.x: %d, view->selection_info.start.y: %d\n", view->selection_info.start.x, view->selection_info.start.y);
+	//printf("event->x: %f, view->scroll_x: %d, event->y: %f, view->scroll_y: %d\n", event->x, view->scroll_x, event->y, view->scroll_y);
+
 	switch (event->type) {
 	        case GDK_2BUTTON_PRESS:
 			view->selection_info.style = EV_SELECTION_STYLE_WORD;
@@ -5166,6 +5316,9 @@ ev_view_button_press_event (GtkWidget      *widget,
 		view->adding_annot_info.start.x = event->x + view->scroll_x;
 		view->adding_annot_info.start.y = event->y + view->scroll_y;
 		view->adding_annot_info.stop = view->adding_annot_info.start;
+		//printf("INSIDE BUTTON PRESS: view->adding_annot_info.start.x = %d\n", view->adding_annot_info.start.x);
+		//printf("INSIDE BUTTON PRESS: view->adding_annot_info.start.y = %d\n", view->adding_annot_info.start.y);
+
 		ev_view_create_annotation (view);
 
 		return TRUE;
@@ -5184,19 +5337,31 @@ ev_view_button_press_event (GtkWidget      *widget,
 				return ev_view_synctex_backward_search (view, event->x , event->y);
 
 			if (EV_IS_SELECTION (view->document) && view->selection_info.selections) {
+				//printf("EV_IS_SELECTION (view->document) && view->selection_info.selections\n");
 				if (event->type == GDK_3BUTTON_PRESS) {
+					//printf("event->type == GDK_3BUTTON_PRESS\n");
 					start_selection_for_event (view, event);
 				} else if (event->state & GDK_SHIFT_MASK) {
+					//printf("event->state & GDK_SHIFT_MASK\n");
 					GdkPoint end_point;
 
 					end_point.x = event->x + view->scroll_x;
 					end_point.y = event->y + view->scroll_y;
-					extend_selection (view, &view->selection_info.start, &end_point);
+					view->motion.x = end_point.x;
+					view->motion.y = end_point.y;
+					//printf("HELLO HELLO view->motion.x: %d view->motion.y: %d end_point.x: %d end_point.y: %d\n", view->motion.x, view->motion.y, end_point.x, end_point.y);
+ 					extend_selection (view, &view->selection_info.start, &end_point);
 				} else if (location_in_selected_text (view,
 							       event->x + view->scroll_x,
 							       event->y + view->scroll_y)) {
+					view->motion.x = 0;
+					view->motion.y = 0;
+					//printf("location_in_selected_text (view, event->x + view->scroll_x, event->y + view->scroll_y)\n");
 					view->selection_info.in_drag = TRUE;
 				} else {
+					//printf("ELSE ELSE ELSE ELSE\n");
+					view->motion.x = 0;
+					view->motion.y = 0;
 					start_selection_for_event (view, event);
 					if (position_caret_cursor_for_event (view, event, TRUE)) {
 						view->cursor_blink_time = 0;
@@ -5204,8 +5369,10 @@ ev_view_button_press_event (GtkWidget      *widget,
 					}
 				}
 			} else if ((media = ev_view_get_media_at_location (view, event->x, event->y))) {
+				//printf("((media = ev_view_get_media_at_location (view, event->x, event->y)))\n");
 				ev_view_handle_media (view, media);
 			} else if ((annot = ev_view_get_annotation_at_location (view, event->x, event->y))) {
+				//printf("((annot = ev_view_get_annotation_at_location (view, event->x, event->y)))\n");
 				if (EV_IS_ANNOTATION_TEXT (annot)) {
 					EvRectangle  current_area;
 					GdkPoint     view_point;
@@ -5243,20 +5410,21 @@ ev_view_button_press_event (GtkWidget      *widget,
 					view->moving_annot_info.cursor_offset.y = doc_point.y - current_area.y1;
 				}
 			} else if ((field = ev_view_get_form_field_at_location (view, event->x, event->y))) {
+				//printf("((field = ev_view_get_form_field_at_location (view, event->x, event->y)))\n");
 				ev_view_remove_all_form_fields (view);
 				ev_view_handle_form_field (view, field);
 			} else if ((link = get_link_mapping_at_location (view, event->x, event->y, &page))){
+				//printf("((link = get_link_mapping_at_location (view, event->x, event->y, &page)))\n");
+
 				_ev_view_set_focused_element (view, link, page);
 			} else if (!location_in_text (view, event->x + view->scroll_x, event->y + view->scroll_y) &&
 				   (image = ev_view_get_image_at_location (view, event->x, event->y))) {
-				if (view->image_dnd_info.image)
-					g_object_unref (view->image_dnd_info.image);
-				view->image_dnd_info.image = g_object_ref (image);
-				view->image_dnd_info.in_drag = TRUE;
+				
 
 				view->image_dnd_info.start.x = event->x + view->scroll_x;
 				view->image_dnd_info.start.y = event->y + view->scroll_y;
 			} else {
+				//printf("ELSE\n");
 				ev_view_remove_all_form_fields (view);
 				_ev_view_set_focused_element (view, NULL, -1);
 
@@ -5266,9 +5434,14 @@ ev_view_button_press_event (GtkWidget      *widget,
 					gtk_widget_queue_draw (widget);
 				}
 
-				if (EV_IS_SELECTION (view->document))
+				if (EV_IS_SELECTION (view->document)) {
+					//printf("STARTING SELECTION FOR EVENT\n");
+
 					start_selection_for_event (view, event);
 
+					//printf("view->motion.x = %d view->motion.y %d", view->motion.x, view->motion.y);
+
+				}
 				if (position_caret_cursor_for_event (view, event, TRUE)) {
 					view->cursor_blink_time = 0;
 					ev_view_pend_cursor_blink (view);
@@ -5610,8 +5783,11 @@ ev_view_motion_notify_event (GtkWidget      *widget,
 								    &start.x, &start.y);
 			_ev_view_transform_view_point_to_doc_point (view, &view->adding_annot_info.stop, &page_area, &border,
 								    &end.x, &end.y);
+		//printf("ADDING ANNOTATION view->adding_annot_info.start.x: %d, view->adding_annot_info.start.y: %d\n", view->adding_annot_info.start.x, view->adding_annot_info.start.y);
+		//printf("ENDING ANNOTATION view->adding_annot_info.stop.x: %d, view->adding_annot_info.stop.y: %d\n", view->adding_annot_info.stop.x, view->adding_annot_info.stop.y);
+			
 
-			switch (view->adding_annot_info.type) {
+		switch (view->adding_annot_info.type) {
 			case EV_ANNOTATION_TYPE_TEXT:
 				rect.x1 = end.x;
 				rect.y1 = end.y;
@@ -5627,7 +5803,6 @@ ev_view_motion_notify_event (GtkWidget      *widget,
 			default:
 				g_assert_not_reached ();
 			}
-
 			/* Take the mutex before set_area, because the notify signal
 			 * updates the mappings in the backend */
 			ev_document_doc_mutex_lock ();
@@ -5716,6 +5891,8 @@ ev_view_motion_notify_event (GtkWidget      *widget,
 
 			view->motion.x = x + view->scroll_x;
 			view->motion.y = y + view->scroll_y;
+
+			printf("scroll_x: %d, scroll_y: %d, motion.x: %d, motion.y: %d\n", view->scroll_x, view->scroll_y, view->motion.x, view->motion.y);
 
 			/* Queue an idle to handle the motion.  We do this because
 			 * handling any selection events in the motion could be slower
@@ -5877,6 +6054,9 @@ ev_view_button_release_event (GtkWidget      *widget,
 
 		view->adding_annot_info.stop.x = event->x + view->scroll_x;
 		view->adding_annot_info.stop.y = event->y + view->scroll_y;
+		printf("ADDING ANNOTATION view->adding_annot_info.start.x: %d, view->adding_annot_info.start.y: %d\n", view->adding_annot_info.start.x, view->adding_annot_info.start.y);
+		printf("ENDING ANNOTATION view->adding_annot_info.stop.x: %d, view->adding_annot_info.stop.y: %d view->scroll_y: %d\n", view->adding_annot_info.stop.x, view->adding_annot_info.stop.y, view->scroll_y);
+
 		if (annot_added)
 			g_signal_emit (view, signals[SIGNAL_ANNOT_ADDED], 0, view->adding_annot_info.annot);
 
@@ -9144,6 +9324,7 @@ compute_new_selection (EvView          *view,
 		       GdkPoint        *start,
 		       GdkPoint        *stop)
 {
+	//printf("Inside compute_new_selection\n");
 	int i, first, last;
 	GList *list = NULL;
 
@@ -9155,6 +9336,7 @@ compute_new_selection (EvView          *view,
 	 * pages. This could be an empty list, a list of just one
 	 * page or a number of pages.*/
 	for (i = first; i <= last; i++) {
+		//printf("Compute_new_selection loop %d\n", i);
 		EvViewSelection *selection;
 		GdkRectangle     page_area;
 		GtkBorder        border;
@@ -9177,11 +9359,18 @@ compute_new_selection (EvView          *view,
 			point = stop;
 
 		if (i == first) {
+			//printf("Inside i == first\n");
 			_ev_view_transform_view_point_to_doc_point (view, point,
 								    &page_area, &border,
 								    &selection->rect.x1,
 								    &selection->rect.y1);
+			
+			//printf("selection->rect.x1 %f, selection->rect.y1 %f\n", selection->rect.x1, selection->rect.y1);
+			/*view->annot_selection.x1 = selection->rect.x1;
+			view->annot_selection.y1 = selection->rect.y1;*/
 		}
+		
+		
 
 		/* If the selection is contained within just one page,
 		 * make sure we don't write 'start' into both points
@@ -9190,10 +9379,14 @@ compute_new_selection (EvView          *view,
 			point = stop;
 
 		if (i == last) {
+			//printf("Inside i == last\n");			
 			_ev_view_transform_view_point_to_doc_point (view, point,
 								    &page_area, &border,
 								    &selection->rect.x2,
 								    &selection->rect.y2);
+			//printf("selection->rect.x2 %f, selection->rect.y2 %f\n", selection->rect.x2, selection->rect.y2);
+			/*view->annot_selection.x2 = selection->rect.x2;
+			view->annot_selection.y2 = selection->rect.y2;*/
 		}
 
 		list = g_list_prepend (list, selection);
@@ -9209,6 +9402,7 @@ static void
 merge_selection_region (EvView *view,
 			GList  *new_list)
 {
+	//printf("Inside merge_selection_region\n");
 	GList *old_list;
 	GList *new_list_ptr, *old_list_ptr;
 
@@ -9229,7 +9423,7 @@ merge_selection_region (EvView *view,
 
 		new_sel = (new_list_ptr) ? (new_list_ptr->data) : NULL;
 		old_sel = (old_list_ptr) ? (old_list_ptr->data) : NULL;
-
+		//printf("%f, %f, %f, %f\n", new_sel->rect.x1, new_sel->rect.y1, new_sel->rect.x2, new_sel->rect.y2);
 		/* Assume that the lists are in order, and we run through them
 		 * comparing them, one page at a time.  We come out with the
 		 * first page we see. */
@@ -9310,14 +9504,25 @@ merge_selection_region (EvView *view,
 			 * to rounding errors or pixel alignment.
 			 */
 			n_rects = cairo_region_num_rectangles (region);
+			//printf("Number of Rectangles %d\n", n_rects);
 			for (i = 0; i < n_rects; i++) {
 				cairo_rectangle_int_t rect;
-
+				//printf("view->scroll_y %d\n", view->scroll_y);				
+				//printf("page_area.y + border.top %d\n",  page_area.y + border.top);
 				cairo_region_get_rectangle (region, i, &rect);
 				rect.x += page_area.x + border.left - view->scroll_x - 2;
 				rect.y += page_area.y + border.top - view->scroll_y - 2;
 				rect.width += 4;
 				rect.height += 4;
+				printf("%d %d %d %d\n", rect.x, rect.y, rect.width, rect.height);
+				
+				/*Add selected text to annot_selection_start and annot_selection_stop just in case user wants to add annotation*/
+				view->annot_selection_start.x = rect.x + view->scroll_x;
+				view->annot_selection_start.y = rect.y + view->scroll_y;
+				view->annot_selection_stop.x = rect.x + rect.width + view->scroll_x - 6;
+				view->annot_selection_stop.y = rect.y + rect.height + view->scroll_y - 6;				
+				//printf("%f %f %f %f\n", view->annot_selection.x1, view->annot_selection.y1, view->annot_selection.x2, view->annot_selection.y2);
+				
 				cairo_region_union_rectangle (damage_region, &rect);
 			}
 			cairo_region_destroy (region);
@@ -9356,12 +9561,14 @@ selection_free (EvViewSelection *selection)
 static void
 clear_selection (EvView *view)
 {
+	//printf("Inside clear_selection\n");
 	merge_selection_region (view, NULL);
 }
 
 void
 ev_view_select_all (EvView *view)
 {
+	//printf("Inside ev_view_select_all\n");
 	GList *selections = NULL;
 	int n_pages, i;
 

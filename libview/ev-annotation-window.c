@@ -514,7 +514,7 @@ ev_annotation_window_focus_in_event (GtkWidget     *widget,
 {
 	EvAnnotationWindow *window = EV_ANNOTATION_WINDOW (widget);
 
-	printf("Inside ev_annotation_window_focus_in_event\n");		
+	//printf("Inside ev_annotation_window_focus_in_event\n");		
 
 	if (window->in_move) {
 		if (window->orig_x != window->x || window->orig_y != window->y) {
@@ -538,7 +538,7 @@ ev_annotation_window_focus_out_event (GtkWidget     *widget,
 {
 	EvAnnotationWindow *window = EV_ANNOTATION_WINDOW (widget);
 
-	printf("Inside ev_annotation_window_focus_out_event\n");	
+	//printf("Inside ev_annotation_window_focus_out_event\n");	
 
 	//ev_annotation_window_sync_contents (window);
 
@@ -661,7 +661,7 @@ ev_annotation_window_set_annotation (EvAnnotationWindow *window,
 gboolean
 ev_annotation_window_is_open (EvAnnotationWindow *window)
 {
-	printf("ev_annotation_window_is_open\n");	
+	//printf("ev_annotation_window_is_open\n");	
 
 	g_return_val_if_fail (EV_IS_ANNOTATION_WINDOW (window), FALSE);
 

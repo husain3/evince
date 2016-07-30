@@ -158,6 +158,8 @@ void                 ev_annotation_get_area                  (EvAnnotation      
                                                               EvRectangle            *area);
 gboolean             ev_annotation_set_area                  (EvAnnotation           *annot,
                                                               const EvRectangle      *area);
+gboolean	     ev_annotation_set_preselected_area      (EvAnnotation      *annot,
+                        	    			      const EvRectangle *area);
 
 /* EvAnnotationMarkup */
 GType                ev_annotation_markup_get_type           (void) G_GNUC_CONST;

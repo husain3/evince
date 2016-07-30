@@ -36,6 +36,8 @@ struct _EvAnnotation {
 	gchar           *modified;
 	GdkRGBA          rgba;
         EvRectangle      area;
+
+
 };
 
 struct _EvAnnotationClass {
@@ -715,19 +717,64 @@ gboolean
 ev_annotation_set_area (EvAnnotation      *annot,
                         const EvRectangle *area)
 {
-        gboolean was_initial;
+        //printf("INSIDE ev_annotation_set_area\n");
+	gboolean was_initial;
 
         g_return_val_if_fail (EV_IS_ANNOTATION (annot), FALSE);
         g_return_val_if_fail (area != NULL, FALSE);
 
-        if (ev_rect_cmp ((EvRectangle *)area, &annot->area) == 0)
-                return FALSE;
+	if (ev_rect_cmp ((EvRectangle *)area, &annot->area) == 0){
+	        //printf("            EV ANNOTATION FIRST IF\n");
+		return FALSE;
+	}
+        was_initial = annot->area.x1 == -1 && annot->area.x2 == -1
+                && annot->area.y1 == -1 && annot->area.y2 == -1;
+	
+	//printf("was_initial: %d\n", was_initial);
+	//printf("annot->area.x1 %f annot->area.x2 %f annot->area.y1 %f annot->area.y2 %f\n", annot->area.x1, annot->area.x2, annot->area.y1, annot->area.y2); 	
+
+	//printf("area.x1 %f area.x2 %f area.y1 %f area.y2 %f\n", area->x1, area->x2, area->y1, area->y2);        
+	annot->area = *area;
+	//printf("\n");
+	
+        if (!was_initial) {
+               	//printf("            EV ANNOTATION SECONDS IF\n");
+		g_object_notify (G_OBJECT (annot), "area");
+	}
+
+        return TRUE;
+}
+
+gboolean
+ev_annotation_set_preselected_area (EvAnnotation      *annot,
+                        	    const EvRectangle *area)
+{
+        //printf("INSIDE ev_annotation_set_area\n");
+	gboolean was_initial;
+
+        g_return_val_if_fail (EV_IS_ANNOTATION (annot), FALSE);
+        g_return_val_if_fail (area != NULL, FALSE);
+
+
+	/*if (ev_rect_cmp ((EvRectangle *)area, &annot->area) == 0){
+	        printf("            EV ANNOTATION FIRST IF\n");
+		return FALSE;
+	}*/
 
         was_initial = annot->area.x1 == -1 && annot->area.x2 == -1
                 && annot->area.y1 == -1 && annot->area.y2 == -1;
-        annot->area = *area;
-        if (!was_initial)
-                g_object_notify (G_OBJECT (annot), "area");
+	
+	//printf("was_initial: %d\n", was_initial);
+	//printf("annot->area.x1 %f annot->area.x2 %f annot->area.y1 %f annot->area.y2 %f\n", annot->area.x1, annot->area.x2, annot->area.y1, annot->area.y2); 	
+
+	//printf("area.x1 %f area.x2 %f area.y1 %f area.y2 %f\n", area->x1, area->x2, area->y1, area->y2);        
+	annot->area = *area;
+	//printf("\n");
+	
+        if (!was_initial) {
+               	//printf("            EV ANNOTATION SECONDS IF\n");
+		g_object_notify (G_OBJECT (annot), "area");
+	}
 
         return TRUE;
 }
@@ -1038,6 +1085,9 @@ ev_annotation_markup_set_rectangle (EvAnnotationMarkup *markup,
 	g_return_val_if_fail (ev_rect != NULL, FALSE);
 
 	props = ev_annotation_markup_get_properties (markup);
+	//printf("props->rectangle.x1 = %f props->rectangle.y1 = %f props->rectangle.x2 =  %f  props->rectangle.y2 = %f\n", props->rectangle.x1, props->rectangle.y1, props->rectangle.x2, props->rectangle.y2);
+	//printf("ev_rect->x1 = %f ev_rect->y1 = %f ev_rect->x2 = %f ev_rect->y2 = %f\n", ev_rect->x1, ev_rect->y1,  ev_rect->x2, ev_rect->y2);	
+
 	if (props->rectangle.x1 == ev_rect->x1 &&
 	    props->rectangle.y1 == ev_rect->y1 &&
 	    props->rectangle.x2 == ev_rect->x2 &&

@@ -139,6 +139,7 @@ typedef struct {
 	EvAnnotationTextMarkupType markup_type;
 	EvAnnotationColor       color;       
 	EvAnnotation    *annot;
+	gint		text_preselected;
 } AddingAnnotInfo;
 
 typedef struct {
@@ -245,6 +246,10 @@ struct _EvView {
 	EvViewWindowChild *window_child_focus;
 	AddingAnnotInfo    adding_annot_info;
 	MovingAnnotInfo    moving_annot_info;
+
+	/*Annotations from Selection*/
+	GdkPoint annot_selection_start;
+	GdkPoint annot_selection_stop;		
 
 	/* Focus */
 	EvMapping *focused_element;
