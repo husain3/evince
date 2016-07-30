@@ -3608,6 +3608,7 @@ ev_view_begin_add_annotation (EvView          *view,
 		EvViewSelection *selection;
 		GList *list;
 
+		EvRectangle  current_area;
 		EvRectangle area;
 		EvRectangle popup_rect;
 
@@ -3646,7 +3647,7 @@ ev_view_begin_add_annotation (EvView          *view,
 		{
 			printf("NULL\n");
 		}
-
+		ev_annotation_get_area (view->adding_annot_info.annot, &current_area);
 		_ev_view_transform_view_point_to_doc_point (view, &view->adding_annot_info.start, &page_area, &border,
 							    &start.x, &start.y);
 		_ev_view_transform_view_point_to_doc_point (view, &view->adding_annot_info.stop, &page_area, &border,
@@ -3656,12 +3657,12 @@ ev_view_begin_add_annotation (EvView          *view,
 		//printf("y coordinate difference %f\n", end.y - start.y);
 		
 		switch (view->adding_annot_info.type) {
-			//case EV_ANNOTATION_TYPE_TEXT:
-				//rect.x1 = end.x;
-				//rect.y1 = end.y;
-				//rect.x2 = rect.x1 + current_area.x2 - current_area.x1;
-				//rect.y2 = rect.y1 + current_area.y2 - current_area.y1;
-				//break;
+			case EV_ANNOTATION_TYPE_TEXT:
+				rect.x1 = end.x;
+				rect.y1 = end.y;
+				rect.x2 = rect.x1 + current_area.x2 - current_area.x1;
+				rect.y2 = rect.y1 + current_area.y2 - current_area.y1;
+				break;
 			case EV_ANNOTATION_TYPE_TEXT_MARKUP:
 				rect.x1 = start.x;
 				rect.y1 = start.y;
