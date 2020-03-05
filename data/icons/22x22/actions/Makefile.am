@@ -5,6 +5,14 @@ context = actions
 iconsdir = $(themedir)/$(size)/$(context)
 
 icons_DATA = \
+	evince-comment-annotation.png				\
+	evince-yellow-highlight-annotation.png				\
+	evince-magenta-highlight-annotation.png				\
+	evince-cyan-highlight-annotation.png				\
+	evince-green-highlight-annotation.png				\
+	evince-format-text-squiggly.png				\
+	evince-format-text-strikethrough.png				\
+	evince-format-text-underline.png				\
 	eye.png				\
 	object-rotate-left.png		\
 	object-rotate-right.png		\
